@@ -1,0 +1,170 @@
+﻿@{
+    ViewBag.Title = "DownSetting";
+    Layout = "~/Views/Shared/_IndexLayout.cshtml";
+}
+<style>
+    .tableList th {
+        font-weight:400;
+        text-align: center;
+        width: 50%;
+    }
+    .tableStyle1 tr th:first-child {
+    padding:0px;
+    text-align:center;
+    }
+    table.dataTable thead > tr > th, table.dataTable thead > tr > td {
+        text-align: center;
+        padding: 0px;
+    }
+    .cselTime {
+        width: 50%;
+        text-align: center;
+        padding: 0 0 0 40px;
+    }
+ 
+</style>
+<div class="container" style="margin: 50px 0px;">
+    <div class="insideCon insideBg">
+        <div class="title" style="margin-top:-20px;margin-left:-15px">
+            <h1 style="line-height:none;">下载设置</h1>
+        </div>
+         <div class="tableList">
+             <table id="issueTable" class="tableStyle tableStyle1 dataTable">
+                 <thead>
+                     <tr role="row">
+                         <th>角色类型</th>
+                         <th>可选时间</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <tr role="row">
+                         <th>管理员</th>
+                         <th style="padding-left:17%;">@{
+    List<SelectListItem> SelTimeGuanli = new List<SelectListItem> {
+                new SelectListItem { Text="一个月",Value="1"},
+                new SelectListItem {Text="三个月" ,Value="3"},
+                new SelectListItem {Text="六个月" ,Value="6"},
+                new SelectListItem {Text="十二个月" ,Value="12"},
+                new SelectListItem {Text="无限制" ,Value="0"}
+    };
+    SelTimeGuanli[Convert.ToInt32(ViewBag.Guanli)].Selected = true;
+}
+@Html.DropDownList("SelTimeGuanli", SelTimeGuanli, new { @class = "form-control cselTime" })
+</th>
+                     </tr>
+                     <tr role="row">
+                         <th>员工</th>
+                         <th style="padding-left:17%;">
+                             @{
+                                 List<SelectListItem> SelTimeYuangong= new List<SelectListItem> {
+                new SelectListItem { Text="一个月",Value="1"},
+                new SelectListItem {Text="三个月" ,Value="3"},
+                new SelectListItem {Text="六个月" ,Value="6"},
+                new SelectListItem {Text="十二个月" ,Value="12"},
+                   new SelectListItem {Text="无限制" ,Value="0"}
+    };
+                                 SelTimeYuangong[Convert.ToInt32(ViewBag.Yuangong)].Selected = true;
+                             }
+                             @Html.DropDownList("SelTimeYuangong", SelTimeYuangong, new { @class = "form-control cselTime" })
+                         </th>
+                     </tr>
+                     <tr role="row">
+                         <th>高级会员</th>
+                         <th style="padding-left:17%;">
+                             @{
+                             List<SelectListItem> SelTimeGaoji = new List<SelectListItem> {
+                new SelectListItem { Text="一个月",Value="1"},
+                new SelectListItem {Text="三个月" ,Value="3"},
+                new SelectListItem {Text="六个月" ,Value="6"},
+                new SelectListItem {Text="十二个月" ,Value="12"},
+                   new SelectListItem {Text="无限制" ,Value="0"}
+    };
+                             SelTimeGaoji[Convert.ToInt32(ViewBag.Gaoji)].Selected = true;
+                         }
+                         @Html.DropDownList("SelTimeGaoji", SelTimeGaoji, new { @class = "form-control cselTime" })
+                     </th>
+                     </tr>
+                     <tr role="row">
+                         <th>中级会员</th>
+                         <th style="padding-left:17%;">
+                             @{
+                             List<SelectListItem> SelTimeZhongji = new List<SelectListItem> {
+                new SelectListItem { Text="一个月",Value="1"},
+                new SelectListItem {Text="三个月" ,Value="3"},
+                new SelectListItem {Text="六个月" ,Value="6"},
+                new SelectListItem {Text="十二个月" ,Value="12"},
+                   new SelectListItem {Text="无限制" ,Value="0"}
+    };
+                             SelTimeZhongji[Convert.ToInt32(ViewBag.Zhongji)].Selected = true;
+                         }
+                         @Html.DropDownList("SelTimeZhongji", SelTimeZhongji, new { @class = "form-control cselTime" })
+                     </th>
+                     </tr>
+                     <tr role="row">
+                         <th>初级会员</th>
+                         <th style="padding-left:17%;">
+                             @{
+                             List<SelectListItem> SelTimeChuji = new List<SelectListItem> {
+                new SelectListItem { Text="一个月",Value="1"},
+                new SelectListItem {Text="三个月" ,Value="3"},
+                new SelectListItem {Text="六个月" ,Value="6"},
+                new SelectListItem {Text="十二个月" ,Value="12"},
+                   new SelectListItem {Text="无限制" ,Value="0"}
+    };
+                             SelTimeChuji[Convert.ToInt32(ViewBag.Chuji)].Selected = true;
+                         }
+                         @Html.DropDownList("SelTimeChuji", SelTimeChuji, new { @class = "form-control cselTime" })
+                     </th>
+                     </tr>
+                 </tbody>
+                 <tfoot>
+                     <tr role="row">
+                         <th colspan="2" style="text-align: center;"><button class="btn btn-primary save" id="btnSave">保存</button></th>
+                     </tr>
+                 </tfoot>
+             </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        goBack();
+        $("#btnSave").click(function () {
+                //var postData = JSON.stringify({"DownSetting":[
+                //    {RoleID:1,RoleDownTime: $("#SelTimeGuanli").val().trim()},
+                //    {RoleID:2,RoleDownTime: $("#SelTimeYuangong").val().trim() },
+                //    {RoleID:3,RoleDownTime: $("#SelTimeGaoji").val().trim() },
+                //    {RoleID:4,RoleDownTime: $("#SelTimeZhongji").val().trim() },
+                //    {RoleID:5,RoleDownTime: $("#SelTimeChuji").val().trim() }
+                //]
+                //});
+ 
+            var postData =$("#SelTimeGuanli").val().trim()+ "," + $("#SelTimeYuangong").val().trim()+ "," + $("#SelTimeGaoji").val().trim() +
+            "," + $("#SelTimeZhongji").val().trim() + "," + $("#SelTimeChuji").val().trim();
+            $.post("/BaseMar/UpdateDownSetting/" + postData, function (date) {
+                if (date == "suc") {
+                    $.alert({
+                        title: '系统提示',
+                        content: '保存成功',
+                        confirm: function () {
+                            goBack();
+                        }
+                    });
+                }
+                else {
+                    $.alert({
+                        title: '系统提示',
+                        content: '操作失败',
+                        confirm: function () {
+                        }
+                    });
+                }
+            });
+        });
+
+        function goBack() {
+            $("#baseDataMar").removeClass("active");
+            $("#baseUserMar").addClass("active");
+        }
+    });
+</script>

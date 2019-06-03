@@ -1,0 +1,66 @@
+﻿div.form-group div.col-sm-10 div.col-sm-1 {
+    margin-top: 5px;
+    margin-left: 0;
+}
+
+.boxmain {
+    height: 100% !important;
+    padding: 10px 10px;
+    background-color: white;
+}
+
+.searchboder {
+    width: 100%;
+    border: 1px solid #eeeeee;
+    padding: 10px 8px;
+    margin-bottom: 10px;
+}
+
+.subpan {
+    text-align: center;
+}
+
+#btnBack {
+    margin-left: 30px;
+}
+
+.boxmain .form-horizontal .form-group label span {
+    color: red;
+    vertical-align: middle;
+    padding: 0px 10px;
+}
+
+.boxmain .row .form-group label span {
+    color: red;
+    vertical-align: middle;
+    padding: 0px 10px;
+}
+
+
+p {
+    margin: 0px;
+}
+
+fieldset {
+    margin-bottom: 30px;
+}
+
+    fieldset legend span {
+        display: inline-block;
+        width: 3px;
+        background-color: #4C54E6;
+        margin-right: 5px;
+    }
+
+    fieldset ul li {
+        list-style-type: none;
+        float: left;
+        width: 200px;
+        text-align: left;
+        padding-left: 100px;
+        margin-bottom: 30px;
+    }
+
+li a {
+    color: black;
+}

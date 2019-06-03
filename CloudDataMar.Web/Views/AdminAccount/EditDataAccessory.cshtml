@@ -1,0 +1,348 @@
+﻿@model CloudDataMar.Web.ViewModel.DataDetailInfoViewModel
+@{
+    ViewBag.Title = "EditDataAccessory";
+    var infolist = CloudDataMar.Web.App_Start.AppCommon.GetDataInfos();
+    CloudDataMar.Web.ViewModel.DataDetailInfoViewModel model=ViewData.Model as  CloudDataMar.Web.ViewModel.DataDetailInfoViewModel;
+    Layout = "~/views/shared/_indexlayout.cshtml";
+}
+<div class="container" style="margin: 50px 0px;">
+    <div class="insideCon insideBg">
+        <div class="title" style="margin-top:-20px;margin-left:-15px">
+            <h1>编辑资料</h1>
+        </div>
+        <form id="saveform" method="Post" role="form">
+            <div class="modal-body">
+                @Html.HiddenFor(m => m.ID)
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label class="col-sm-3 control-label" style="padding-top:6px;">二级目录:</label>
+                        <div class="col-sm-9">
+                            @Html.DropDownListFor(m => m.Data_Info_ID, infolist, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-sm-3 control-label" style="padding-top:6px;">资料标题:</label>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(m => m.Data_Detail_Name, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label class="col-sm-3 control-label" style="padding-top:6px;">资料类型:</label>
+                        <div class="col-sm-9">
+                            @{
+                                List<SelectListItem> listDataType = new List<SelectListItem> {
+                new SelectListItem { Text="内部资料",Value="0"},
+                new SelectListItem {Text="外部资料" ,Value="1"} };
+                                listDataType[Convert.ToInt32(model.Data_IsOutSide)].Selected = true;
+                            }
+                            @Html.DropDownListFor(m => m.Data_IsOutSide, listDataType, new { @class = "form-control" })
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-sm-3 control-label" style="padding-top:6px;">数据标签:</label>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(m => m.Data_Detail_Source, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label class="col-sm-3 control-label" style="padding-top:6px;">是否发布:</label>
+                        <div class="col-sm-9">
+                            @{
+                                List<SelectListItem> listPublishType = new List<SelectListItem> {
+                                     new SelectListItem {Text="已发布" ,Value="1"},
+                                     new SelectListItem { Text="未发布",Value="0"}};
+                                     int i=Convert.ToInt32(model.Data_IsPublish)==1?0:1;
+                                listPublishType[i].Selected = true;
+                            }
+                            @Html.DropDownListFor(m => m.Data_IsPublish, listPublishType, new { @class = "form-control" })
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6">
+                      
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12">
+                        <label id="labscript">脚本:</label>
+                        @Html.TextAreaFor(m => m.Data_Detail_Script, new { @class = "form-control", rows = "5" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12">
+                        <label id="content">内容:</label>
+                        @Html.TextAreaFor(m => m.Data_Detail_Desc, new { @class = "form-control", rows = "5" })
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <input name="filedata1" id="filedata1" type="file" class="btn btn-primary form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="tableList">
+                        <table cellpadding="0" cellspacing="0" id="AccessoryTable" class="tableStyle tableStyle1 dataTable mg20 mt20">
+                            <thead>
+                                <tr role="row">
+                                    <th>编号</th>
+                                    <th>资料名称</th>
+                                    <th>上传时间</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;" id="divsave">
+                    <div class="col-lg-4">
+                        <button class="btn btn-primary save" id="btnsave" type="submit">保存</button>
+                        <a href="@Url.Action("EditDataDetail", "AdminAccount")" class="btn btn-default cancel">取消</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <script type="text/javascript">
+        $.fn.dataTable.ext.errMode = function (s, h, m) { }
+        var accTable;
+        $(function () {
+            initUploadifyPicture();
+            ValidateForm();
+            accTable = $('#AccessoryTable').DataTable({
+                "sDom": "rtip",
+                "bProcessing": false,
+                "bServerSide": false,
+                "bFilter": false,
+                "bPaginate": false,
+                "bLengthChange": false,
+                "bAutoWidth": true,
+                "bInfo": false,
+                "ajax": {
+                    url: "/AdminAccount/GetDataAccessoryList?DetailID=" + $('#ID').val(),
+                    type: "POST"
+                },
+                "sAjaxDataProp": "Results",//保存列表的字段
+                "aoColumns": [
+                    { "mData": 'ID', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                    { "mData": 'Data_Accessory_Address', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                    { "mData": 'CreateDateTime', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                    { "mData": 'Action', 'sDefaultContent': '', "sClass": "left", "bSortable": false }
+                ],
+                "columnDefs": [
+                    {
+                        "render": function (data, type, row) {
+                            return formatTime(row.CreateDateTime)
+                        },
+                        "targets": 2
+                    }]
+            });
+        });
+
+        $.validator.setDefaults({
+            submitHandler: function (form) {
+                //获取编辑器内容start
+                var CkeditorStr = htmlEncodeByRegExp(CKEDITOR.instances.Data_Detail_Desc.getData());
+                //获取编辑器内容end
+                var table = $("#AccessoryTable");
+                var jsonData = { files: [] };
+                $("#AccessoryTable tbody").find("tr").each(function () {
+                    jsonData.files.push({
+                        ID: parseInt($(this).children('td:eq(0)').text()),
+                        Data_Accessory_Address: $(this).children('td:eq(1)').text(),
+                        CreateDateTime: $(this).children('td:eq(2)').text()
+                    });
+                });
+                $(form).ajaxSubmit({
+                    type: "POST",
+                    url: "/AdminAccount/CreateDataAccessory",
+                    dataType: "json",
+                    data: {postCon:CkeditorStr, postStr: JSON.stringify(jsonData) },
+                    success: function (data) {
+                        if (data.State == "Success") {
+                            alert(data.State);
+                            window.location.href = '@Url.Action("EditDataDetail", "AdminAccount")';
+                        }
+                        else if (data.State == "NotAllow") {
+                            $.alert({
+                                content: "不允许内部数据与外部数据共用一个二级目录"
+                            });
+                        }
+                        else {
+                            $.alert({
+                                content: data.Message
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+        function ValidateForm() {
+            $('#saveform').validate({
+                rules: {
+                    Data_Detail_Name: {
+                        required: true
+                    },
+                    Data_Detail_Source: {
+                        required: true
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    error.appendTo(element.parent().next());
+                }
+            });
+        }
+
+        function initUploadifyPicture() {
+            $('#filedata1').uploadify({
+                swf: '/Content/uploadify-3.2.1/uploadify.swf?var=' + (new Date()).getTime(),//功能flash地址
+                uploader: '/AdminAccount/AttachmentFile',
+                buttonText: 'Attachment',//选择文件的按钮上显示的文字
+                auto: true,//当文件被添加到队列时是否自动上传
+                multi: false, //是否允许多文件上传
+                queueSizeLimit: 5,//限定上传文件个数
+                preventCaching: false,
+                method: 'post',
+                height: 34,
+                width: 104,
+                cancelImg: '/Content/uploadify-3.2.1/uploadify-cancel.png',//取消按钮的图片路径
+                fileSizeLimit: '1048000KB',//上传文件的大小限制
+                fileTypeExts: '*',//*.xls; *.xlsx;*.doc;*.docx;*.pdf允许上传的文件后缀
+                fileTypeDesc: '.xls, .xlsx;.doc;.docx;.pdf', //在浏览窗口底部的文件类型下拉菜单中显示的文本
+                formData: { "DetailID": $('#Data_Info_ID').val() },
+                removeCompleted: true, //完成上传后是否从队列中删除
+                onUploadSuccess: function (file, data, response) {
+                    var jsonData = JSON.parse(data);
+                    if (jsonData.State == "Success") {
+                        $('#AccessoryTable tbody').append(jsonData.Data);
+                    }
+                    else {
+                        $.alert({
+                            title: jsonData.State,
+                            content: jsonData.Message,
+                        });
+                    }
+                }
+            });
+        }
+
+        function del_tr(id) {
+            var tr = $("#tr_" + id);
+            tr.parentNode.removeChild(tr);
+        }
+
+        $(document).on("click", ".btn-delete", function () {
+            var $this = $(this);
+            var cid = $(this).parent('td').parent('tr').children('td:eq(0)').text();
+            $.confirm({
+                title: 'Confirm!',
+                content: 'Comfirm to Delete this DataAccessory？',
+                confirm: function () {
+                    if (cid != 0) {
+                        $.get($this.attr("href"), null, function (data) {
+                            if (data.State == "Success") {
+                                alert(data.State);//
+                                window.location.href = '@Url.Action("EditDataAccessory", "AdminAccount", new { id = model.ID})';
+                            }
+                            else if (data.State == "Exception") {
+                                $.alert({
+                                    title: data.State,
+                                    title: data.State,
+                                    content: data.Message
+                                });
+                            }
+                            else {
+                                $.alert({
+                                    title: data.State,
+                                    content: data.Message,
+                                    confirm: function () {
+                                        window.location.href = '@Url.Action("EditDataAccessory", "AdminAccount")';
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else {
+                        $this.parent('td').parent('tr').remove();
+                    }
+                },
+                cancel: function () {
+                  //  window.location.href = '@Url.Action("EditDataAccessory", "AdminAccount")';
+                }
+            });
+            return false;
+        });
+        function htmlEncodeByRegExp(op) {
+            if (op != null) {
+                var s = "";
+                if (op.length == 0) return "";
+                s = op.replace(/&/g, "&amp;");
+                s = s.replace(/</g, "&lt;");
+                s = s.replace(/>/g, "&gt;");
+                s = s.replace(/ /g, "&nbsp;");
+                s = s.replace(/\'/g, "&#39;");
+                s = s.replace(/\"/g, "&quot;");
+                return s;
+            } else {
+                return "";
+            }
+        }
+        function htmlDecodeByRegExp(op) {
+            if (op != null) {
+                var s = "";
+                if (op.length == 0) return "";
+                s = op.replace(/&amp;/g, "&");
+                s = s.replace(/&lt;/g, "<");
+                s = s.replace(/&gt;/g, ">");
+                s = s.replace(/&nbsp;/g, " ");
+                s = s.replace(/&#39;/g, "\'");
+                s = s.replace(/&quot;/g, "\"");
+                return s;
+            } else {
+                return "";
+            }
+        }
+        $(document).ready(function () {
+            //首次加载页面检测是否外部数据 start
+            if ($("#Data_IsOutSide").val() == "1") {
+                $("#filedata1").hide();
+                $(".tableList").hide();
+            } else {
+                $("#labscript").hide();
+                $("#Data_Detail_Script").hide();
+                $("#filedata1").show();
+                $(".tableList").show();
+            }
+            //首次加载页面检测是否外部数据 end
+            $("#Data_IsOutSide").bind("change", function () {
+                var val = $(this).val();
+                if (val == "1") {
+                    $("#filedata1").hide();
+                    $(".tableList").hide();
+                    $("#labscript").show();
+                    $("#Data_Detail_Script").show();
+                } else {
+                    $("#labscript").hide();
+                    $("#Data_Detail_Script").hide();
+                    $("#filedata1").show();
+                    $(".tableList").show();
+                }
+            });
+
+            ///富文本框
+            CKEDITOR.replace('Data_Detail_Desc', {
+                toolbar: "MyToolbar"
+            });
+            CKEDITOR.instances.Data_Detail_Desc.setData(htmlDecodeByRegExp($("#Data_Detail_Desc").val()));
+        })
+    </script>

@@ -1,0 +1,61 @@
+﻿@model CloudDataMar.Model.data_type_info
+@{
+    ViewBag.Title = "DataInfo";
+    Layout = "~/Views/Shared/_ContentLayout.cshtml";
+}
+<div style="width: 2000px;margin:-60px 0px 61px -300px; background-color: white; height: 60px"></div>
+<div class="search">
+    <div class="searchBg"></div>
+    <div class="searchList">
+        <input type="text" class="text" id="text-search" placeholder="Please enter the searching key words">
+        <input type="button" class="btn" id="btn-search">
+    </div>
+</div>
+<div class="wrapper">
+    <div class="insideCon container">
+        <div class="title">
+            <h1>
+                <a style = "position:static;righte:Opx;" href="http://gpwin2008r2.chinacloudapp.cn">HomePage</a> -
+                <a style = "position:static;righte:Opx;" 
+                href="/Data/DataInfo/@Model.ID">@Model.Data_Type_Name</a>
+            </h1>
+        </div>
+        <div class="content">
+            <div class="businessInfo">
+                    <ul class="picList">
+                        @foreach (var item in Model.data_info.ToList())
+                        {
+                            <li>
+                                <div class="img">
+                                    <img src="~/Content/UploadImages/@item.Data_Info_Image" alt="">
+                                </div>
+                                <p style="margin: 10px 20px; font-size: 20px; font-weight: bold; font-family:Helvetica">
+                                    <a href="@Url.Action("DataDetailInfo", "Data", new { InfoID = item.ID})">@item.Data_Info_Name</a>
+                                </p>
+                                <p class="text" style="margin: 10px 0px 0px 20px;width:284px; height: 54px;">
+                                    @{
+                            if (item.Data_Info_Describe.Length > 70)
+                            {
+                                   @item.Data_Info_Describe.Substring(0, 68).Insert(68, " ...");
+                            }
+                            else
+                            {
+                                  @item.Data_Info_Describe;
+                            }
+                                    }
+                            </p>
+                            </li>
+                        }
+                    </ul>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(document).on('click', '#btn-search', function () {
+            var stext = $('#text-search').val();
+            window.location.href = "/Data/DataSearch?searchtype=Home&searchtext=" + stext;
+        });
+    </script>
+}

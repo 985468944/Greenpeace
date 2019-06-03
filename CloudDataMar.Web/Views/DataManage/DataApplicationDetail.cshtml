@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "DataApplicationDetail";
+    Layout = "~/Views/Shared/_ContentLayout.cshtml";
+    CloudDataMar.Model.data_application ApplicationModel = ViewData.Model;
+}
+<div class="container" style="min-height:500px;width:1280px; background-color:#FFFFFF">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><a href="javascript:history.go(-1)"><span aria-hidden="true">&larr;</span> 返回上一页</a></li>
+        </ul>
+    </nav>
+    <div class="row">
+        <div class="col-lg-4">
+            <ul class="list-group">
+                <li style="border-bottom: 1px solid #ddd;background-color:#fff;margin-bottom:-1px;padding:10px 15px;display:block;position:relative">
+                    <table>
+                        <tr>
+                            <td colspan="2">
+                                <span style="color:gray">更新时间</span><br />
+                                <h3 style="margin-top: 3px; color: #4169E1">@ApplicationModel.UpdateDateTime</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <span style="color:gray">创建时间</span><br />
+                                <h3 style="margin-top: 3px; color: #4169E1">@ApplicationModel.CreateDateTime</h3>
+                            </td>
+                        </tr>
+                    </table>
+                </li>
+                <li style="border-bottom: 1px solid #ddd; border-top: 1px solid #ddd; background-color:#fff;margin-bottom:-1px;padding:10px 15px;display:block;position:relative">
+                    <table>
+                        <tr>
+                            <td>
+                                <span>访问量</span>
+                                <br />
+                                <span style="font-size: 20px; color: #4169E1">@ApplicationModel.PageViewCount</span>
+                            </td>
+                            <td style="padding-left:30px">
+                                <span>下载量</span>
+                                <br />
+                                <span style="font-size: 20px; color: #4169E1">@ApplicationModel.DownloadCount</span>
+                            </td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-8">
+            <ul class="list-group">
+                        <li style="border-bottom: 1px solid #ddd; border-top: 1px solid #ddd; background-color: #F5F5F5; margin-bottom: -1px; padding: 10px 15px; display: block; position: relative">
+                            <table>
+                                <tr>
+                                    <td width="150px">是否发布</td>
+                                    <td width="150px">@ApplicationModel.Data_IsPublish</td>
+                                </tr>
+                                
+                            </table>
+                        </li>
+                        
+
+
+                        <li style="border-bottom: 1px solid #ddd; background-color:#fff;margin-bottom:-1px;padding:10px 15px;display:block;position:relative">
+                            <span style="font-size: 18px; font-weight: 600; color: gray">Dataset Information</span>
+                        </li>
+                        <li style="border-bottom: 1px solid #ddd; border-top: 1px solid #ddd; background-color: #F5F5F5; margin-bottom: -1px; padding: 10px 15px; display: block; position: relative">
+                    <table>
+                        <tr>
+                            <td width="150px">Agency</td>
+                            <td style="padding-left:100px">Department of Environmental Protection(DEP)</td>
+                        </tr>
+                    </table>
+                </li>
+                <li style="border-bottom: 1px solid #ddd; background-color:#fff;margin-bottom:-1px;padding:10px 15px;display:block;position:relative">
+                    <span style="font-size: 18px; font-weight: 600; color: gray">Attachments</span>
+                </li>
+                <li style="border-bottom: 1px solid #ddd; border-top: 1px solid #ddd; background-color: #F5F5F5; margin-bottom: -1px; padding: 10px 15px; display: block; position: relative">
+                    <table>
+                        <tr>
+                            <td>@ApplicationModel.Data_Image</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </li>
+                <li style="border-bottom: 1px solid #ddd; background-color:#fff;margin-bottom:-1px;padding:10px 15px;display:block;position:relative">
+                    <span style="font-size: 18px; font-weight: 600; color: gray">Topics</span>
+                </li>
+                <li style="border-bottom: 1px solid #ddd; border-top: 1px solid #ddd; background-color: #F5F5F5; margin-bottom: -1px; padding: 10px 15px; display: block; position: relative">
+                    <table>
+                        <tr>
+                            <td width="150px">Category</td>
+                            <td style="padding-left:100px">@ApplicationModel.Data_Application_Name</td>
+                        </tr>
+                    </table>
+                </li>
+                <li style="border-bottom: 1px solid #ddd; border-top: 1px solid #ddd; background-color: #FFF; margin-bottom: -1px; padding: 10px 15px; display: block; position: relative">
+                    <table>
+                        <tr>
+                            <td width="150px">Tags</td>
+                            <td style="padding-left:100px">@ApplicationModel.Data_Application_Content</td>
+                        </tr>
+                    </table>
+                </li>
+                <li style=" background-color: #FFF; margin-bottom: -1px; padding: 10px 15px; display: block; position: relative">
+                    <div style="float:right"><a style="text-decoration: underline; color:#4169E1" href="#">Show More</a></div>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function htmlEncodeByRegExp(op) {
+        if (op != null) {
+            var s = "";
+            if (op.length == 0) return "";
+            s = op.replace(/&/g, "&amp;");
+            s = s.replace(/</g, "&lt;");
+            s = s.replace(/>/g, "&gt;");
+            s = s.replace(/ /g, "&nbsp;");
+            s = s.replace(/\'/g, "&#39;");
+            s = s.replace(/\"/g, "&quot;");
+            return s;
+        } else {
+            return "";
+        }
+    }
+    function htmlDecodeByRegExp(op) {
+        if (op != null) {
+            var s = "";
+            if (op.length == 0) return "";
+            s = op.replace(/&amp;/g, "&");
+            s = s.replace(/&lt;/g, "<");
+            s = s.replace(/&gt;/g, ">");
+            s = s.replace(/&nbsp;/g, " ");
+            s = s.replace(/&#39;/g, "\'");
+            s = s.replace(/&quot;/g, "\"");
+            return s;
+        } else {
+            return "";
+        }
+    }
+    $(document).ready(function () {
+       
+        $("#LabContent").html(htmlDecodeByRegExp($("#hidContent").val()));
+    })
+</script>

@@ -1,0 +1,101 @@
+﻿@model CloudDataMar.Model.data_type_info
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   List<List<CloudDataMar.Model.data_type_info>> itemList= ViewData["DataTypeList"] as List<List<CloudDataMar.Model.data_type_info>>;
+}
+<div class="bodyBg">
+    <div class="index-img">
+        <div style="padding-top:75px;">
+            <div class="brand">
+                <a href="#"><img  src="~/Content/Images/logo.png" alt="绿色和平" /></a>
+            </div>
+            <div class="search">
+                <div class="searchBg"></div>
+                <div class="searchList">
+                    <input type="text" class="text" id="text-search"  placeholder="请输入要搜索的关键字">
+                    <input type="button" class="btn" id="btn-search">
+                </div>
+                <div class="searchKey">
+                    <a href="#">超市农残</a><a href="#">转基因</a><a href="#">PM2.5</a><a href="#">污染</a><a href="#">海洋</a><a href="#">森林</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class="dataBox" >
+            <div class="dataList">
+                <div class="dataItem">
+                    <a href="/DataManage/DataSpecialList">
+                        <span class="dataIcon" ><img src="~/Content/Images/icon1.jpg" width="25" alt="" style="margin-top:5px;"></span>
+                        <span class="dataText"><img src="~/Content/Images/wenzi1.jpg" width="115" height="25" alt=""></span>
+                    </a>
+                </div>
+            </div>
+            <div class="dataList">
+                <div class="dataItem">
+                    <a href="/DataManage/DataApplicationList">
+                        <span class="dataIcon"><img src="~/Content/Images/icon2.jpg" width="25" alt="" style="margin-top:5px;"></span>
+                        <span class="dataText"><img src="~/Content/Images/wenzi2.jpg" width="115" height="25" alt=""></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div id="myCarousel" class="carousel slide">
+            <ol class="carousel-indicators" style="left:48.8%">
+@for (var i = 0; i < itemList.Count; i++)
+{
+    <li data-target="#myCarousel" data-slide-to="@i" class="@(i ==0?"active":"")"></li>
+}
+            </ol>
+            <div class="container carousel-inner">
+                @for (var i = 0; i < itemList.Count; i++)
+                {
+                    <div class="item  @(i ==0?"active":"")">
+
+                        <div class="row">
+                            <div class="index">
+                                <ul class="listBox listBoxH">
+                                    @foreach (var item in itemList[i] as List<CloudDataMar.Model.data_type_info>)
+                                    {
+                                        <li>
+                                            <div class="img">
+                                                <img src="~/Content/UploadImages/@item.Data_Type_Image" />
+                                            </div>
+                                            <div class="text">
+                                                <a href="#">
+                                                    <h4 style="font-size: 22px; margin-bottom:3px;">@item.Data_Type_Name</h4>
+                                                    <span>@item.Data_Type_Describe</span>
+                                                </a>
+                                            </div>
+                                            <div class="shadow"></div>
+                                            <div class="layer">
+                                                <div class="tit"><a href="@Url.Action("DataInfo", "Data", new { ID = item.ID })" style="color: #D8D8D8; text-decoration: none; ">@item.Data_Type_Name</a></div>
+                                                <dl>
+                                                    @foreach (var datainfo in item.data_info.Take(4))
+                                                    {
+                                                      <dd><a href="@Url.Action("DataDetailInfo", "Data", new { InfoID = datainfo.ID })">@datainfo.Data_Info_Name</a></dd>
+                                                    }
+                                                </dl>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <a class="left carousel-control listBoxW"  style="margin-left:100px" href="#myCarousel" data-slide="prev"><img src="~/Content/Images/left_arrow.png" /></a>
+            <a class="right carousel-control listBoxW" style="margin-right:130px" href="#myCarousel" data-slide="next"><img src="~/Content/Images/right_arrow.png" /></a>
+        </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(document).on('click', '#btn-search', function () {
+            var stext = $('#text-search').val();
+            window.location.href = "/Data/DataSearch?searchtype=Home&searchtext=" + stext;
+        });
+    </script>
+}

@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "DataApplicationList";
+    Layout = "~/Views/Shared/_ContentLayout.cshtml";
+}
+@using CloudDataMar.Model;
+
+<div style="width: 2000px;margin:-60px 0px 61px -300px; background-color: white; height: 60px"></div>
+<div class="search">
+    <div class="searchBg"></div>
+    <div class="searchList" >
+        <input type="text" class="text" id="text-search"  placeholder="请输入要搜索的关键字">
+        <input type="button" class="btn" id="btn-search">
+    </div>
+</div>
+<div style="width:100%;">
+    <div class="insideCon insideBg">
+        <div class="title">
+            <h1>
+                <a style="position:static;righte:Opx;" href="/AdminAccount/Home">首页</a>-
+                <a style="position:static;righte:Opx;" href="/DataManage/DataApplicationList">数据专题</a>
+            </h1>
+        </div>
+        <div class="content pd20">
+            <div class="searchBg"></div>
+            <div class="mt20">
+
+                应用名： <input type="text"  id="AppName" />
+                <span style="margin-left:20px;">日期：</span><input id="startTime" class="form_datetime" /> <span>至</span> <input id="endTime" class="form_datetime" />
+                <button class="btn btn-primary" style="margin-left:50px;" id="btnSearch">搜索</button>
+            </div>
+        </div>
+        <div class="line"></div>
+        <div style="margin:0px 50px 0px 50px">
+            @foreach (var d in ViewData["dataApplicationList"] as List<data_application>)
+            {
+                <a href='/DataManage/DataApplicationDetail/@d.ID'>
+                    <div class="row" style="border-bottom: 1px solid #eee;margin:20px 0px 20px 0px">
+                        <div class="col-lg-3">
+                            <img style="margin-bottom:20px" width="170" height="140" src='/Content/UploadImages/@d.Data_Image' />
+                        </div>
+                        <div class="col-lg-6">
+                            <div style="font-size: 22px">
+                                <p style="font-size:15px">@d.Data_Application_Name </p>
+                                <span style="font-size:13px">@d.Data_Application_Content</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <ul>
+                                <li style="margin-bottom:5px">创建时间：@d.CreateDateTime</li>
+                                <li style="color: orange;margin-bottom:5px">修改时间：@d.UpdateDateTime</li>
+                                <li style="margin-bottom: 5px">访问量：@d.DownloadCount</li>
+                                <li style="color: orange; margin-bottom: 5px">下载量：@d.PageViewCount</li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+    $.fn.dataTable.ext.errMode = function (s, h, m) { }
+    var table;
+    $(function () {
+        $('.form_datetime').datetimepicker({
+            minView: "hour",
+            lang: "ch",
+            format: 'yyyy-mm-dd',
+            timepicker: false,
+            yearStart: 2000,
+            yearEnd: 2050,
+            todayButton: false
+        });
+
+        $("#btnSearch").bind("click", function () {
+            var appname = $("#AppName").val();
+            if (appname != null) {
+                window.location.href = "/DataManage/DataApplicationList?appname=" + appname;
+            }
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();            
+            if (startTime != null && endTime != null) {
+                window.location.href = "/DataManage/DataApplicationList?startTime=" + startTime + "&&endTime=" + endTime;
+            }
+            if (appname != null&& startTime != null && endTime != null) {
+                window.location.href = "/DataManage/DataApplicationList?appName=" + appname + "&&startTime=" + startTime + "&&endTime=" + endTime;
+            }
+        });
+    });
+
+    $(document).on('click', '#btn-search', function () {
+        var stext = $('#text-search').val();
+        window.location.href = "/Data/DataSearch?searchtype=Home&searchtext=" + stext;
+    });
+    $(".checkall").click(function () {
+        var check = $(this).prop("checked");
+        $(".checkchild").prop("checked", check);
+    });
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+    </script>
+}

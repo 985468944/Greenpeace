@@ -1,0 +1,41 @@
+﻿@model CloudDataMar.Model.data_accessory_info
+@{
+    ViewBag.Title = "DataAccessory";
+    Layout = "~/Views/Shared/_ContentLayout.cshtml";
+}
+
+<div class="wrapper">
+    <div class="insideCon insideBg">
+        <div class="title">
+            <h1 style="line-height:none;">DataAccessory</h1>
+            <input type="hidden" value="@ViewData["DetailID"]" id="infoid" />
+        </div>
+        <div class="content pd20">
+            <div class="loginBox">
+                <form id="saveform" name="saveform" method="Post" role="form">
+                    <div class="row form-group">
+                        <div class="col-sm-offset-1 col-sm-7">
+                            @Html.TextBoxFor(m => m.Data_Accessory_Address, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-offset-1 col-sm-7">
+                            @Html.TextBoxFor(m => m.Data_Accessory_Describe, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-offset-1 col-sm-7">
+                            <button id="btnLogin" type="submit" class="form-control btn btn-default">登陆</button>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-offset-1 col-sm-7">
+                            <button id="btnRegister" type="button" class="form-control btn btn-default">注册</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{}

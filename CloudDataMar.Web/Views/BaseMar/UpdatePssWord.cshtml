@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "UpdatePssWord";
+    Layout = "~/views/shared/_indexlayout.cshtml";
+}
+
+<div class="container" style="margin: 50px 0px;">
+    <div class="insideCon insideBg">
+        <div class="title" style="margin-top:-20px;margin-left:-15px">
+            <h1 style="line-height:none;">修改密码</h1>
+        </div>
+        <div class="content pd20">
+            <form class="form-horizontal" role="form" id="saveform" name="saveform">
+                <div class="nonboxy-widget">
+                    <div class="widget-box">
+                        <div class='form-horizontal well'>
+                            <div class="row form-group">
+                                <i style="color:red;">*</i>
+                                <label class="bold col-sm-2 control-label">原密码:</label>
+                                <div class="col-sm-6">
+                                    <input class="form-control" placeholder="请再次输入密码" id="OldPassword" name="OldPassword" type="password">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <i style="color:red;">*</i>
+                                <label class="bold col-sm-2 control-label">新密码:</label>
+                                <div class="col-sm-6">
+                                    <input class="form-control" placeholder="请再次输入密码" id="UserPassword" name="UserPassword" type="password">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <i style="color:red;">*</i>
+                                <label class="bold col-sm-2 control-label">确认密码:</label>
+                                <div class="col-sm-6">
+                                    <input class="form-control" placeholder="请再次输入密码" id="Passwordagain" name="Passwordagain" type="password">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button id="btnSubmit" type="submit" class="btn btn-default" style="width:120px;">保存</button>
+                    <button id="btnCancel" type="button" class="btn btn-default" style=" width:120px;">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            ValidateForm();
+        });
+
+        $(document).on("click", "#btnCancel", function () {
+            window.location.href = '@Url.Action("Home", "AdminAccount")';
+        });
+
+        function ValidateForm() {
+            $('#saveform').validate({
+                rules: {
+                    OldPassword: {
+                        required: true
+                    },
+                    UserPassword: {
+                        required: true
+                    },
+                    Passwordagain: {
+                        required: true,
+                        equalTo: "#UserPassword"
+                    }
+                },
+                messages: {
+                    OldPassword: {
+                        required: "*请输入原密码"
+                    },
+                    UserPassword: {
+                        required: "*请输入新密码"
+                    },
+                    Passwordagain: {
+                        required: "*请再次输入新密码",
+                        equalTo: "*两次密码输入不一致"
+                    },
+                }
+            });
+        }
+
+        $.validator.setDefaults({
+            submitHandler: function (form) {
+                $(form).ajaxSubmit({
+                    type: "Post",
+                    url: "/BaseMar/UpdatePssWordMethod",
+                    data: { oldpass: $('#OldPassword').val(), newpass: $('#UserPassword').val() },
+                    success: function (data) {
+                        if (data.State == "Success") {
+                            alert(data.State);
+                            window.location.href = '@Url.Action("Home", "AdminAccount")';
+                        }
+                        else if (data == "TimeOut") {
+                            $.alert({
+                                title: 'System',
+                                content: '登录已经过期，请重新登录！',
+                                confirm: function () {
+                                }
+                            });
+                        }
+                        else {
+                            $.alert({
+                                title: 'System',
+                                content: '原密码输入错误！',
+                                confirm: function () {
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+}

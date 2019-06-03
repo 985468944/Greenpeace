@@ -1,0 +1,158 @@
+﻿@model CloudDataMar.Model.user_info
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .insideHeader {
+        visibility: hidden;
+    }
+</style>
+<div class="insideCon insideBg">
+    <div class="title">
+        <h1 style="line-height: none;">注册</h1>
+    </div>
+    <div class="content pd20">
+        <form class="form-horizontal" role="form" id="saveform" name="saveform">
+            <div class="nonboxy-widget">
+                <div class="widget-box">
+                    <div class='form-horizontal well'>
+                        <fieldset>
+                            <legend>初级会员</legend>
+                            <div class="row form-group">
+                                <i style="color: red;">*</i>
+                                <label class="bold col-sm-2 control-label">用户名:</label>
+                                <div class="col-sm-6">
+                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "请输入用户名" })
+                                </div>
+                                @*<button id="btnCheck" type="button" class="btn btn-default control-group" style="width:130px;">检查是否可用</button>*@
+                            </div>
+                            <div class="row form-group">
+                                <i style="color: red;">*</i>
+                                <label class="bold col-sm-2 control-label">密码:</label>
+                                <div class="col-sm-6">
+                                    @Html.TextBoxFor(m => m.UserPassword, new { @class = "form-control", @type = "password", @placeholder = "请输入密码" })
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <i style="color: red;">*</i>
+                                <label class="bold col-sm-2 control-label">确认密码:</label>
+                                <div class="col-sm-6">
+                                    @*@Html.TextBoxFor(m => m.UserPassword, new { @class = "form-control", @type = "password", @placeholder = "请输入密码" })*@
+                                    <input class="form-control" placeholder="请再次输入密码" id="Passwordagain" name="Passwordagain" type="password">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>中级会员<label style="font-size: 14px; color: red;">（继续输入电话号码或邮箱地址可成为中级会员）</label></legend>
+                            <div class="row form-group">
+                                <label class="bold col-sm-2 control-label">电话号码:</label>
+                                <div class="col-sm-6">
+                                    @Html.TextBoxFor(m => m.TelePhone, new { @class = "form-control", @placeholder = "请输入电话号码" })
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="bold col-sm-2 control-label">邮箱地址:</label>
+                                <div class="col-sm-6">
+                                    @Html.TextBoxFor(m => m.EMail, new { @class = "form-control", @placeholder = "请输入邮箱地址" })
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>高级会员<label style="font-size: 14px; color: red;">（继续输入工作单位可成为高级会员）</label></legend>
+                            <div class="row form-group">
+                                <label class="bold col-sm-2 control-label">工作单位:</label>
+                                <div class="col-sm-6">
+                                    @Html.TextBoxFor(m => m.WorkUnits, new { @class = "form-control", @placeholder = "请输入工作单位" })
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="bold col-sm-2 control-label">职位:</label>
+                                <div class="col-sm-6">
+                                    @Html.TextBoxFor(m => m.Position, new { @class = "form-control", @placeholder = "职位" })
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button id="btnSubmit" type="submit" class="btn btn-default" style="width: 120px;">注册</button>
+                <button id="btnCancel" type="button" class="btn btn-default" style="width: 120px;">取消</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            ValidateForm();
+        });
+
+        $(document).on("click", "#btnCancel", function () {
+            window.location.href = "@Url.Action("Home", "AdminAccount")";
+        });
+
+            function ValidateForm() {
+                $('#saveform').validate({
+                    rules: {
+                        UserName: {
+                            required: true
+                        },
+                        UserPassword: {
+                            required: true
+                        },
+                        Passwordagain: {
+                            required: true,
+                            equalTo: "#UserPassword"
+                        }
+                    },
+                    messages: {
+                        UserName: {
+                            required: "*请输入用户名"
+                        },
+                        UserPassword: {
+                            required: "*请输入密码"
+                        },
+                        Passwordagain: {
+                            required: "*请再次输入密码",
+                            equalTo: "*两次密码输入不一致"
+                        },
+                    }
+                });
+            }
+
+            $.validator.setDefaults({
+                submitHandler: function (form) {
+                    $(form).ajaxSubmit({
+                        type: "Post",
+                        url: "/Account/RegisterInfo",
+                        success: function (data) {
+                            if (data == "suc") {
+                                window.location.href = "@Url.Action("UserList", "BaseMar")";
+                        } else if (data == "suc2") {
+                            window.location.href = "@Url.Action("Home", "AdminAccount")";
+                          }
+                          else if (data == "exist") {
+                              $.alert({
+                                  title: 'System',
+                                  content: '用户名已经存在！',
+                                  confirm: function () {
+                                  }
+                              });
+                          }
+                          else {
+                              $.alert({
+                                  title: 'System',
+                                  content: '注册失败！',
+                                  confirm: function () {
+                                  }
+                              });
+                          }
+                    }
+                });
+            }
+        });
+    </script>
+}

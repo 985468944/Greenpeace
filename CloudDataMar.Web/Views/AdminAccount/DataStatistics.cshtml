@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "DataStatistics";
+    Layout = "~/views/shared/_indexlayout.cshtml";
+    var typelist = CloudDataMar.Web.App_Start.AppCommon.GetDataTypes();
+}
+
+<div class="container" style="margin: 50px 0px;">
+    <div class="insideCon insideBg">
+        <div class="title" style="margin-top:-20px;margin-left:-15px">
+            <h1>访问统计</h1>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-7">
+                <div class="row">
+                    <label class="col-sm-2" style="margin-top:6px">筛选:</label>
+                    <div class="col-sm-5">
+                        @Html.DropDownList("Data_Type_ID", typelist, new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-5">
+                        @{
+                            List<SelectListItem> listEJ = new List<SelectListItem> {
+                new SelectListItem { Text="---请选择---",Value="0"}  };
+                        }
+                        @Html.DropDownList("Data_Info_ID", listEJ, new { @class = "form-control" })
+                    </div>
+
+                </div>
+            </div>
+           
+        </div>
+        <div class="tableList">
+            <table cellpadding="0" cellspacing="0" id="issueTable" class="tableStyle tableStyle1 dataTable mg20 mt20">
+                <thead>
+                    <tr role="row">
+                        <th>序号</th>
+                        <th>标题</th>
+                        <th>浏览量</th>
+                        <th>下载量</th>
+                       
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $.fn.dataTable.ext.errMode = function (s, h, m) { }
+        var issueTable;
+        $(function () {
+            issueTable = $('#issueTable').DataTable({
+                "sDom": "rtip",
+                "bProcessing": false,
+                "bServerSide": true,
+                "bFilter": false,
+                "bPaginate": false,
+                "bLengthChange": false,
+                "bAutoWidth": true,
+                "bInfo": false,
+                "ajax": {
+                    url: "/AdminAccount/GetStatistics",
+                    type: "POST",
+                    data: function (d) {
+                        d.Data_Info_ID = $("#Data_Info_ID").val();
+                    }
+                },
+                "sAjaxDataProp": "Results",//保存列表的字段
+                "aoColumns": [{
+                    "sTitle": "序号",
+                    "sClass": "dt-center",
+                    "bSortable": false,
+                    "data": null,
+                    "targets": 0
+                },
+                    { "mData": 'name', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                    { "mData": 'browse_quantity', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                    { "mData": 'download_quantity', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' }
+                ],
+               
+                "fnDrawCallback": function () {
+                    this.api().column(0).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }
+            });
+
+            $("#Data_Type_ID").bind("change", function () {
+                if ($(this).val() != "0") {
+                    jsonHtml = "<option value='0' selected>---请选择---</option>";
+                    $.post("GetDetailByTypeId", { dataTypeID: $(this).val() }, function (data) {
+                        if (data.length > 0) {
+                            for (var i = 0; i < data.length; i++) {
+                                jsonHtml += "<option value='" + data[i].ID + "'>" + data[i].Data_Info_Name + "</option>";
+                            }
+                            $("#Data_Info_ID").empty();
+                            $("#Data_Info_ID").append(jsonHtml);
+                        } else {
+                            $("#Data_Info_ID").empty();
+                            $("#Data_Info_ID").append(jsonHtml);
+                        }
+                    });
+                } else {
+                    $("#Data_Info_ID").val("0");
+                    issueTable.draw();
+                }
+            });
+
+            $("#Data_Info_ID").bind("change", function () {
+                issueTable.draw();
+            });
+
+        })
+
+      
+    </script>
+}

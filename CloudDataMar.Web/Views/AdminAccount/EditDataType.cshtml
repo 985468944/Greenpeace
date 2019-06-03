@@ -1,0 +1,262 @@
+﻿@model CloudDataMar.Web.ViewModel.DataTypeViewModel
+@{
+    ViewBag.Title = "DataType";
+    Layout = "~/views/shared/_indexlayout.cshtml";
+}
+
+<div class="container" style="margin: 50px 0px;">
+    <div class="insideCon insideBg">
+        <div class="title" style="margin-top:-20px;margin-left:-15px">
+            <h1>一级目录</h1>
+            <a href='#portlet-config' data-toggle='modal' class="btn btn-primary" style="color:#fff;">添加一级目录</a>
+        </div>
+        <div class="tableList">
+            <table cellpadding="0" cellspacing="0" id="issueTable" class="tableStyle tableStyle1 dataTable mg20 mt20">
+                <thead>
+                    <tr role="row">
+                        <th>序号</th>
+                        <th>标题</th>
+                        <th>描述</th>
+                        <th>图片</th>
+                        <th>Action</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">编辑一级目录</h4>
+                    </div>
+                    <form id="saveform" method="Post" role="form">
+                        <div class="modal-body">
+                            @Html.HiddenFor(m => m.ID)
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 form-group">
+                                    <label>序列:</label>
+                                    @Html.TextBoxFor(m => m.Data_Type_OrderNum, new { @class = "form-control" })
+                                </div>
+                                <div class="col-lg-4 col-md-4 form-group">
+                                    <label>标题:</label>
+                                    @Html.TextBoxFor(m => m.Data_Type_Name, new { @class = "form-control" })
+                                </div>
+                                <div class="col-lg-4 col-md-4 form-group">
+                                    <label>描述:</label>
+                                    @Html.TextBoxFor(m => m.Data_Type_Describe, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row form-inline">
+                                <div class="col-lg-12 col-md-12">
+                                    <label>图片:</label>
+                                    @Html.HiddenFor(m => m.Data_Type_Image, new { @class = "form-control" })
+                                    <input name="filedata" id="filedata" type="file" class="btn btn-primary form-control" />
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 10px;" id="divsave">
+                                <div class="col-lg-4">
+                                    <button class="btn btn-primary save" id="btnsave" type="submit">保存</button>
+                                    <a class="btn btn-default btn-cancel">取消</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $.fn.dataTable.ext.errMode = function (s, h, m) { }
+        var table;
+        $(function () {
+            ValidateForm();
+            initUploadifyPicture();
+            table = $('#issueTable').DataTable({
+                "sDom": "rtip",
+                "bProcessing": false,
+                "bServerSide": false,
+                "bFilter": false,
+                "bPaginate": false,
+                "bLengthChange": false,
+                "bAutoWidth": false,
+                "bInfo": false,
+                "ajax": {
+                    url: "/AdminAccount/GetDataTypeList",
+                    type: "POST"
+                },
+                "sAjaxDataProp": "Results",//保存列表的字段
+                "aoColumns": [
+                    { "mData": 'Data_Type_OrderNum', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                    { "mData": 'Data_Type_Name', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                    { "mData": 'Data_Type_Describe', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                    { "mData": 'Data_Type_Image', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                    { "mData": 'Action', 'sDefaultContent': '', "sClass": "left", "bSortable": false }
+                ],
+                "columnDefs": [
+                   {
+                       "render": function (data, type, row) {
+                           return "<img src='/Content/UploadImages/" + row.Data_Type_Image + "' width='60px'/>"
+                       },
+                       "targets": 3
+                   }]
+            });
+        });
+
+        $.validator.setDefaults({
+            submitHandler: function (form) {
+                if ($("#filedata").data('uploadify').queueData.queueLength > 0) {
+                    $('#filedata').uploadify('upload', '*');
+                }
+                else {
+                    $(form).ajaxSubmit({
+                        type: "Post",
+                        url: "/AdminAccount/CreateDataType",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.State == "Success") {
+                                alert(data.State);
+                                window.location.href = '@Url.Action("EditDataType", "AdminAccount")';
+                            }
+                            else {
+                                $.alert({
+                                    content: data.Message
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        function ValidateForm() {
+            $('#saveform').validate({
+                rules: {
+                    Data_Type_Name: {
+                        required: true
+                    },
+                    Data_Type_Describe: {
+                        required: true
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    error.appendTo(element.parent().next());
+                }
+            });
+        }
+
+        $("#portlet-config").on("hide.bs.modal", function (e) {
+            $(this).removeData("modal");
+        });
+
+        $(document).on('click', '.btn-link', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if ($.trim(row.data().ID) != '') {
+                $('#ID').val(row.data().ID);
+                $('#Data_Type_OrderNum').val(row.data().Data_Type_OrderNum);
+                $('#Data_Type_Name').val(row.data().Data_Type_Name);
+                $('#Data_Type_Image').val(row.data().Data_Type_Image);
+                $('#Data_Type_Describe').val(row.data().Data_Type_Describe);
+            }
+        });
+
+        $(document).on("click", ".btn-cancel", function () {
+            window.location.href = '@Url.Action("EditDataType", "AdminAccount")';
+        });
+
+        $(document).on("click", ".btn-delete", function () {
+            var $this = $(this);
+            $.confirm({
+                title: 'Confirm!',
+                content: 'Comfirm to Delete this DataType？',
+                confirm: function () {
+                    $.get($this.attr("href"), null, function (data) {
+                        if (data.State == "Success") {
+                            alert(data.State);
+                            window.location.href = '@Url.Action("EditDataType", "AdminAccount")';
+                        }
+                        else if (data.State == "Exception") {
+                            $.alert({
+                                title: data.State,
+                                title: data.State,
+                                content: data.Message
+                            });
+                        }
+                        else {
+                            $.alert({
+                                title: data.State,
+                                content: data.Message,
+                                confirm: function () {
+                                    window.location.href = '@Url.Action("EditDataType", "AdminAccount")';
+                                }
+                            });
+                        }
+                    });
+                },
+                cancel: function () {
+                    window.location.href = '@Url.Action("EditDataType", "AdminAccount")';
+                }
+            });
+            return false;
+        });
+
+        function initUploadifyPicture() {
+            $('#filedata').uploadify({
+                swf: '/Content/uploadify-3.2.1/uploadify.swf?var=' + (new Date()).getTime(),//功能flash地址
+                uploader: '/AdminAccount/AttachmentImage',
+                buttonText: 'Attachment',//选择文件的按钮上显示的文字
+                auto: false,//当文件被添加到队列时是否自动上传
+                multi: false, //是否允许多文件上传
+                queueSizeLimit: 1,//限定上传文件个数
+                preventCaching: false,
+                height: 34,
+                width: 104,
+                method: 'post',
+                cancelImg: '@Url.Content("/Content/uploadify-3.2.1/uploadify-cancel.png")',//取消按钮的图片路径
+                fileSizeLimit: '2048KB',//上传文件的大小限制
+                fileTypeExts: '*.jpg;*.png;',//允许上传的文件后缀
+                fileTypeDesc: '.jpg,.png', //在浏览窗口底部的文件类型下拉菜单中显示的文本
+                removeCompleted: true, //完成上传后是否从队列中删除
+                onUploadComplete: function (file) {
+
+                },
+                onUploadSuccess: function (file, data, response) {
+                    var jsonData = JSON.parse(data);
+                    if (jsonData.State == "Success") {
+                        $('#Data_Type_Image').val(jsonData.FileName);
+                        $('#saveform').ajaxSubmit({
+                            type: "Post",
+                            url: "/AdminAccount/CreateDataType",
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.State == "Success") {
+                                    alert(data.State);
+                                    window.location.href = '@Url.Action("EditDataType", "AdminAccount")';
+                                }
+                                else {
+                                    $.alert({
+                                        content: data.Message
+                                    });
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        $.alert({
+                            title: jsonData.State,
+                            content: jsonData.Message,
+                        });
+                    }
+                },
+                onUploadStart: function (file) {
+                    $("#filedata").uploadify("settings", "formData", { 'DataTypeName': $('#Data_Type_Name').val(), "DataTypeOrderNum": $('#Data_Type_OrderNum').val() });
+                }
+            });
+        }
+    </script>
+}

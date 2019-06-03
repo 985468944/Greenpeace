@@ -1,0 +1,208 @@
+﻿@model CloudDataMar.Model.data_special
+@{
+    ViewBag.Title = "编辑应用";
+    Layout = "~/Views/Shared/_IndexLayout.cshtml";
+}
+
+<div class="container" style="margin: 50px 0px;">
+    <div class="insideCon insideBg">
+        <div class="title" style="margin-top:-20px;margin-left:-15px">
+            <h1>编辑数据应用</h1>
+        </div>
+        <form id="saveform" method="Post" role="form">
+            <div class="modal-body">
+                @Html.HiddenFor(m => m.ID)
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-lg-1 col-md-1">应用名:</label>
+                        <div class="col-lg-11 col-md-11">
+                            @Html.TextBoxFor(m => m.Data_Special_Name, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-lg-1 col-md-1">状态:</label>
+                        <div class="col-lg-11 col-md-11">
+                            @{
+                                List<SelectListItem> listspecialState = new List<SelectListItem> {
+                                                        new SelectListItem { Text="未发布",Value="0"},
+                                                        new SelectListItem {Text="已发布" ,Value="1"} };
+                                listspecialState[Convert.ToInt32(ViewData["IsPublish"])].Selected = true;
+                            }
+                            @Html.DropDownList("specialState", listspecialState, new { @class = "form-control" })
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-lg-1 col-md-1" style="margin-bottom:0px">链接:</label>
+                        <div class="col-lg-11 col-md-11">
+                            @Html.TextAreaFor(m => m.Data_Special_Url, new { @class = "form-control", rows = "2" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <label>图片:</label>
+                                    </td>
+                                    <td width="50px"></td>
+                                    <td>
+                                        @Html.HiddenFor(m => m.Data_Image, new { @class = "form-control" })
+                                        <input name="filedata" id="filedata" type="file" class="btn btn-primary form-control" />
+                                    </td>
+                                    <td width="10px"></td>
+                                    <td><div id="filedata_img"></div></td>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 10px;" id="divsave">
+                    <div class="col-lg-5"></div>
+                    <div class="col-lg-7">
+                        <button class="btn btn-primary save" id="btnsave" type="button">保存</button>
+                        <a href="@Url.Action("DataSpecialManage", "DataManage")" class="btn btn-default cancel">取消</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function htmlEncodeByRegExp(op) {
+        if (op != null) {
+            var s = "";
+            if (op.length == 0) return "";
+            s = op.replace(/&/g, "&amp;");
+            s = s.replace(/</g, "&lt;");
+            s = s.replace(/>/g, "&gt;");
+            s = s.replace(/ /g, "&nbsp;");
+            s = s.replace(/\'/g, "&#39;");
+            s = s.replace(/\"/g, "&quot;");
+            return s;
+        } else {
+            return "";
+        }
+    }
+    function htmlDecodeByRegExp(op) {
+        if (op != null) {
+            var s = "";
+            if (op.length == 0) return "";
+            s = op.replace(/&amp;/g, "&");
+            s = s.replace(/&lt;/g, "<");
+            s = s.replace(/&gt;/g, ">");
+            s = s.replace(/&nbsp;/g, " ");
+            s = s.replace(/&#39;/g, "\'");
+            s = s.replace(/&quot;/g, "\"");
+            return s;
+        } else {
+            return "";
+        }
+    }
+    $(document).ready(function () {
+        initUploadifyPicture();
+        var ID = getUrlParam("ID");
+        $('#btnsave').click(function () {
+            if (CheckForm()) {
+                var postData = {
+                    ID: ID == null ? 0 : ID,
+                    Data_Special_Name: $("#Data_Special_Name").val(),
+                    Data_IsPublish: $("#specialState").val(),
+                    Data_Image:$("#Data_Image").val(),
+                    Data_Special_Url: $("#Data_Special_Url").val()
+                };
+                $.post('/DataManage/CreateDataSpecial', postData, function (data) {
+                    if (data.State == "Success") {
+                        $.alert({
+                            title: '系统提示',
+                            content: '保存成功！',
+                            confirm: function () {
+                                window.location.href = '@Url.Action("DataSpecialManage", "DataManage")';
+                            }
+                        });
+                    }
+                    else {
+                        $.alert({
+                            title: '系统提示',
+                            content: '操作失败！',
+                            confirm: function () {
+                                window.location.href = '@Url.Action("DataSpecialManage", "DataManage")';
+                            }
+                        });
+                    }
+                });
+            } else {
+                $.alert({
+                    title: '系统提示',
+                    content: '请完善表单信息！',
+                    confirm: function () {
+                    }
+                });
+            }
+        });
+        ///富文本框
+        //CKEDITOR.replace('Content', {
+        //    toolbar: "MyToolbar"
+        //});
+        //CKEDITOR.instances.Content.setData(htmlDecodeByRegExp($("#Content").val()));
+    });
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]); return null; //返回参数值
+    }
+
+    function CheckForm() {
+        if ($.trim($("#Data_Special_Name").val()) == "") {
+            return false;
+        }
+        return true;
+    }
+    function initUploadifyPicture() {
+        $('#filedata').uploadify({
+            swf: '/Content/uploadify-3.2.1/uploadify.swf?var=' + (new Date()).getTime(),//功能flash地址
+            uploader: '/DataManage/DataSpecialAttachmentImage',
+            buttonText: 'Attachment',//选择文件的按钮上显示的文字
+            auto: true,//当文件被添加到队列时是否自动上传
+            multi: false, //是否允许多文件上传
+            queueSizeLimit: 1,//限定上传文件个数
+            preventCaching: false,
+            height: 34,
+            width: 104,
+            method: 'post',
+            cancelImg: '/Content/uploadify-3.2.1/uploadify-cancel.png',//取消按钮的图片路径
+            fileSizeLimit: '2048KB',//上传文件的大小限制
+            fileTypeExts: '*.jpg;*.png;',//允许上传的文件后缀
+            fileTypeDesc: '.jpg,.png', //在浏览窗口底部的文件类型下拉菜单中显示的文本
+            removeCompleted: true, //完成上传后是否从队列中删除
+            onUploadComplete: function (file) {
+
+            },
+            onUploadSuccess: function (file, data, response) {
+                var jsonData = JSON.parse(data);
+                if (jsonData.State == "Success") {
+                    $('#Data_Image').val(jsonData.FileName);
+                    $("#filedata_img").append("<img width='60px' height='40px' src=\"/Content/UploadImages/" + jsonData.FileName + "\">");
+                }
+                else {
+                    $.alert({
+                        title: jsonData.State,
+                        content: jsonData.Message,
+                    });
+                }
+            },
+            onUploadStart: function (file) {
+                $("#filedata").uploadify("settings", "formData", { 'Data_Special_Name': $('#Data_Special_Name').val() });
+            }
+        });
+    }
+</script>

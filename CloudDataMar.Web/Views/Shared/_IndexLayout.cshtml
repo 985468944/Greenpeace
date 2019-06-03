@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .insideHeader {
+        background-color: white;
+        position: relative;
+    }
+
+        .insideHeader a {
+            color: black;
+            font-size: 12px;
+        }
+
+    .top_backimg {
+        visibility: visible;
+        margin: 0px auto;
+        width: 237px;
+        line-height: 56px;
+    }
+
+    .menu {
+        background: url(../../Content/Images/inset_menu.jpg) no-repeat left center;
+    }
+</style>
+<div>
+
+    <div class="main-sidebar" style="position: relative; float: left;">
+        <div class="sidebar">
+            @if (Session["UserLevel"] != null && (Session["UserLevel"].ToString() == "1" || Session["UserLevel"].ToString() == "2"))
+            {
+                @Html.Action("MenuList", "AdminAccount", "Admin");
+            }
+        </div>
+    </div>
+
+    <div style="float: left;">
+        @RenderBody()
+    </div>
+</div>
+<div style="clear: both;"></div>
+
+@RenderSection("scripts", required: false)

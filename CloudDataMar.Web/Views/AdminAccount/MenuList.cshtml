@@ -1,0 +1,28 @@
+﻿<div class="user-panel">
+</div>
+<!-- Sidebar Menu -->
+<ul class="sidebar-menu">
+    <li id="baseUserMar" class="treeview">
+        <a href="javascript:void(0)"><i class="fa fa-user"></i><span>用户管理</span> <i class="fa fa-angle-left pull-right"></i></a>
+        <ul class="treeview-menu menu-open">
+            <li id="userMar">
+                <a href="@Url.Action("UserList", "BaseMar")"><i class="fa fa-user-md"></i>用户列表</a>
+                <a href="@Url.Action("DownSetting", "BaseMar")"><i class="fa fa-download"></i>下载设置</a>
+            </li>
+        </ul>
+    </li>
+    <li id="baseDataMar" class="treeview active">
+        <a href="javascript:void(0)"><i class="fa fa-database"></i><span>数据管理</span> <i class="fa fa-angle-left pull-right"></i></a>
+        <ul class="treeview-menu menu-open">
+            <li id="dataMar">
+                <a href="@Url.Action("EditDataType", "AdminAccount")"><i class="fa fa-file-text-o"></i>一级目录</a>
+                <a href="@Url.Action("EditDataInfo", "AdminAccount")"><i class="fa fa-file-text-o"></i>二级目录</a>
+                <a href="@Url.Action("EditDataDetail", "AdminAccount")"><i class="fa fa-file-text-o"></i>三级目录</a>
+                <a href="@Url.Action("AnnounceManage", "AdminAccount")"><i class="fa fa-volume-up"></i>公告管理</a>
+                <a href="@Url.Action("DataSpecialManage", "DataManage")"><i class="fa fa-file-text-o"></i>数据应用</a>
+                <a href="@Url.Action("DataApplicationManage", "DataManage")"><i class="fa fa-file-text-o"></i>数据专题</a>
+                <a href="@Url.Action("DataStatistics", "AdminAccount")"><i class="fa fa-file-text-o"></i>访问统计</a>
+            </li>
+        </ul>
+    </li>
+</ul>

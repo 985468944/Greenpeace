@@ -1,0 +1,110 @@
+﻿@model List<CloudDataMar.Web.ViewModel.SearchDetailViewModel>
+@{
+    ViewBag.Title = "DataSearch";
+    Layout = "~/Views/Shared/_ContentLayout.cshtml";
+}
+<div style="width: 2000px;margin:-60px 0px 61px -300px; background-color: white; height: 60px"></div>
+<div class="search">
+    <div class="searchBg"></div>
+    <div class="searchList">
+        <input type="text" class="text" id="text-search" placeholder="Please enter the searching key words">
+        <input type="button" class="btn" id="btn-search">
+    </div>
+</div>
+<div>
+    <div class="insideCon insideBg">
+        @*<p>与"<b>@ViewData["SearchText"]</b>"相关的 @ViewData["DataCount"] 条内容</p>*@
+        <p>@ViewData["DataCount"] items of information related with"<b>@ViewData["SearchText"]"</b></p>
+        <div class="line"></div>
+        <div>
+            <table id="issueTable" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" class="checkall" /></th>
+                        <th>NO</th>
+                        <th>Title</th>
+                        <th>Data label</th>
+                        <th>Data type</th>
+                        <th>Update time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        int xh = 0;
+                        foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="checkchild" value="@item.id" alt="@item.isoutside" />
+                            </td>
+                            <td>@(xh += 1)</td>
+                            <td class="dsearch"><a href="@Url.Action("DataDetailContentInfo", "Data", new { ID = item.id })">@item.title</a></td>
+                            <td>@item.detail</td>
+                            <td>@(item.isoutside != 1 ? "内部" : "外部")</td>
+                            <td>@(item.updatedatetime == null ? "" : item.updatedatetime.ToString())</td>
+                        </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="notic mg20 mt20">
+            <span>*</span>Please multiple download if more than 10 items at one time.
+        </div>
+        <div class="btnList mg20 mt20">
+            <span class="btn"><a href="#" class="btn-download">download source data</a></span>
+            <span class="btn"><a href="#">visualization</a></span>
+            <span class="btn"><a href="#">data analysis</a></span>
+            <span class="btn"><a href="#">view in map</a></span>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $(".checkchild").each(function () {
+                //如果是外部数据则删除多选框
+                if ($(this).attr('alt') == "1") {
+                    $(this).remove();
+                }
+            });
+        });
+
+        $(document).on('click', '#btn-search', function () {
+            var stext = $('#text-search').val();
+            window.location.href = "/Data/DataSearch?searchtype=Home&searchtext=" + stext;
+        });
+
+        $(".checkall").click(function () {
+            var check = $(this).prop("checked");
+            $(".checkchild").prop("checked", check);
+        });
+
+        $('.btn-download').click(function () {
+            var jsonData = "";
+            $(".checkchild:checked").each(function () {
+                    jsonData += $(this).val() + ",";
+            });
+            if (jsonData.length > 0) {
+                window.location.href = "/Data/DownLoadFiles?ids=" + jsonData;
+                //$.post("/Data/isAllowDown?ids=" + jsonData, function (result) {
+                //    if (result == "suc") {
+                //        window.location.href = "/Data/DownLoadFiles?ids=" + jsonData;
+                //    } else {
+                //        $.alert({
+                //            title: "提示",
+                //            content: "根据角色等级你只能下载" + jsonData+"到当前时间的数据!",
+                //        });
+                //    }
+            } else {
+                $.alert({
+                                title: "Message",
+                                content: "Please select the data to download",
+                            });
+            }
+        });
+    </script>
+}

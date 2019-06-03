@@ -1,0 +1,499 @@
+﻿@{
+    ViewBag.Title = "详细信息";
+    Layout = "~/Views/Shared/_ContentLayout.cshtml";
+    CloudDataMar.Model.data_detail_info DataDetailContentModel = ViewData.Model;
+}
+<div class="container" style="min-height:500px;width:1280px; background-color:#FFFFFF">
+    @*<nav>
+        <ul class="pager">
+            @*<li class="previous"><a Q="javascript:history.go(-1)"><span aria-hidden="true">&larr;</span> previous title page</a></li>
+        </ul>
+    </nav>*@
+    <div class="insideCon insideBg">
+        <div class="title">
+            <h1>
+                <a style = "position:static;righte:Opx;" href="http://gpwin2008r2.chinacloudapp.cn">HomePage</a> -
+                <a style="position:static;righte:Opx;" href="/Data/DataInfo/@ViewData["Data_Type_ID"]">@ViewData["Data_Type_Name"]</a> -
+                <a style="position:static;righte:Opx;" href="/Data/DataDetailInfo?InfoID=@DataDetailContentModel.Data_Info_ID">@ViewData["Data_info_Name"]</a> -
+                <a style="position:static;righte:Opx;" href="/Data/DataDetailContentInfo/@DataDetailContentModel.ID">@DataDetailContentModel.Data_Detail_Name</a>
+                
+            </h1>
+        </div>
+    </div>
+    
+    <div class="container" style="width:1200px;">
+        <div class="tableList">
+            <div class="row form-group" id="SearchColumns" style="margin-left:0px;margin-right:0px">
+                <div class="row form-group">
+                    @if (!string.IsNullOrWhiteSpace(DataDetailContentModel.SearchColumns1))
+                    { 
+                        <div class="col-lg-3 col-md-3">
+                            <label id="lblSearchColumns1">@DataDetailContentModel.SearchColumns1</label>
+                            <input id="txtSearchColumns1" type="text" class="form-control"/>
+                        </div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(DataDetailContentModel.SearchColumns2))
+                    { 
+                        <div class="col-lg-3 col-md-3">
+                            <label id="lblSearchColumns2">@DataDetailContentModel.SearchColumns2</label>
+                            <input id="txtSearchColumns2" type="text" class="form-control"/>
+                        </div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(DataDetailContentModel.SearchColumns3))
+                    { 
+                        <div class="col-lg-3 col-md-3">
+                            <label id="lblSearchColumns3">@DataDetailContentModel.SearchColumns3</label>
+                            <input id="txtSearchColumns3" type="text" class="form-control"/>
+                        </div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(DataDetailContentModel.SearchColumns4))
+                    { 
+                        <div class="col-lg-3 col-md-3">
+                            <label id="lblSearchColumns4">@DataDetailContentModel.SearchColumns4</label>
+                            <input id="txtSearchColumns4" type="text" class="form-control"/>
+                        </div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(DataDetailContentModel.SearchColumns5))
+                    { 
+                        <div class="col-lg-3 col-md-3">
+                            <label id="lblSearchColumns5">@DataDetailContentModel.SearchColumns5</label>
+                            <input id="txtSearchColumns5" type="text" class="form-control"/>
+                        </div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(DataDetailContentModel.SearchColumns6))
+                    { 
+                        <div class="col-lg-3 col-md-3">
+                            <label id="lblSearchColumns6">@DataDetailContentModel.SearchColumns6</label>
+                            <input id="txtSearchColumns6" type="text" class="form-control"/>
+                        </div>
+                    }
+                
+                    @if (!string.IsNullOrWhiteSpace(DataDetailContentModel.SearchColumns1) || !string.IsNullOrWhiteSpace(DataDetailContentModel.SearchColumns2) || !string.IsNullOrWhiteSpace(DataDetailContentModel.SearchColumns3) || !string.IsNullOrWhiteSpace(DataDetailContentModel.SearchColumns4) || !string.IsNullOrWhiteSpace(DataDetailContentModel.SearchColumns5) || !string.IsNullOrWhiteSpace(DataDetailContentModel.SearchColumns6))
+                    {
+                        if (ViewData["SearchConditionCount"].ToString() == "1" || ViewData["SearchConditionCount"].ToString() == "5")
+                        { 
+                            <div class="col-lg-3 col-md-3"></div>
+                            <div class="col-lg-3 col-md-3"></div>
+                        }
+                        if (ViewData["SearchConditionCount"].ToString() == "2" || ViewData["SearchConditionCount"].ToString() == "6")
+                        { 
+                            <div class="col-lg-3 col-md-3"></div>
+                        }
+                        if (ViewData["SearchConditionCount"].ToString() == "4")
+                        { 
+                            <div class="col-lg-3 col-md-3"></div>
+                            <div class="col-lg-3 col-md-3"></div>
+                            <div class="col-lg-3 col-md-3"></div>
+                        }
+                        
+                        <div class="col-lg-3 col-md-3">
+                            <label id=""></label>
+                            <button id="btnSearch" value="Search" onclick="LoadData()" type="submit" class="form-control btn-primary">搜索</button>
+                        </div>
+                    }
+                    
+                </div>
+            </div>
+            <table width="100%" cellpadding="0" cellspacing="0" id="DataList" class="tableStyle tableStyle1 dataTable mg20 mt20">                
+            </table>
+         </div>       
+        @*<div class="page-header text-center">
+                <h1>
+                    @DataDetailContentModel.Data_Detail_Name
+                  <small>@DataDetailContentModel.Data_Detail_Source</small>
+                </h1>
+            </div>*@
+        @*<textarea id="Data_Detail_Desc" name="Data_Detail_Desc" style="display:none">@DataDetailContentModel.Data_Detail_Desc</textarea>*@
+        <input id="hidData_Detail_Desc" type="hidden" value="@DataDetailContentModel.Data_Detail_Desc" />
+        
+    </div>
+    <input id="hidDataId" type="hidden" value="@DataDetailContentModel.ID" />
+    <input id="hidIsoutSide" type="hidden" value="@DataDetailContentModel.Data_IsOutSide" />
+</div>
+<div style ="width: 1280px; min-height: 150px; background-color: #FFFFFF">
+     <div class="container">
+         
+         <hr />
+         <div id="dateSelect" class="row">
+             <div class="col-sm-2"><b>Time range</b>&nbsp; </div>
+             <div class="col-sm-10"><span>From </span><input id="startTime" class="form_datetime" value="@DateTime.Now.ToShortDateString()"> <span>To</span> <input id="endTime" class="form_datetime" value="@DateTime.Now.ToShortDateString()"></div>
+         </div>
+         <br />
+         
+         <div class="row text-center">
+             <span class="btn col-sm-2" id="Btndownload"><a href="#" class="btn-download">download source data</a></span>
+             @*<span class="btn col-sm-2" id="Btnvisualization"><a href="#">visualization</a></span>*@
+             <span class="btn col-sm-2" id="BtnContentInfo"><a href="#">content info</a></span>
+             @*判断一级标题是否显示‘可视化’按钮*@
+             <script>
+                 var arr1 = [10,14,17];
+                 var length = arr1.length;
+                @*alert('@DataDetailContentModel.Data_Info_ID');*@
+                 for ( var i=0; i<length; i++){
+                     if ( @ViewData["Data_Type_ID"] == arr1[i] ){
+                        document.getElementById("Btnvisualization").style.display = "none";
+                    }
+                }
+            </script>
+             @*判断二级标题是否显示‘可视化’按钮*@
+             <script>
+                 var arr2 = [1,8,16,17,29,32,37];
+                 var length = arr2.length;
+                @*alert('@DataDetailContentModel.Data_Info_ID');*@
+                 for ( var i=0; i<length; i++){
+                     if ( '@DataDetailContentModel.Data_Info_ID' == arr2[i] ){
+                        document.getElementById("Btnvisualization").style.display = "none";
+                    }
+                }
+            </script>
+            @*判断三级标题是否显示‘可视化’按钮*@
+             <script>
+                 var arr3 = [46,74,80,91,92,96,97,99,106,145,146,149];
+                 var length = arr3.length;
+                 for ( var i=0; i<length; i++){
+                     if ( '@DataDetailContentModel.ID' == arr3[i] ){
+                        document.getElementById("Btnvisualization").style.display = "none";
+                    }
+                }
+            </script>
+             @*<span class="btn col-sm-2" style="display:none"><a href="#" id="Btnanalysis">data analysis</a></span>*@
+             @*<span class="btn col-sm-2" style="display:none"><a href="#">view in map</a></span>*@
+         </div>
+    </div>
+</div>
+ 
+<!------------------------附件下载页面--------------------------------------------------------------------->
+<div class="modal fade" id="DataContentInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myInfoModalLabel">详细信息页面</h4>
+            </div>
+            <div class="modal-body">
+                <label id="LabData_Detail_Desc"></label>                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!------------------------附件下载页面--------------------------------------------------------------------->
+<div class="modal fade" id="myModalxz" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">下载确认页</h4>
+            </div>
+            <div class="modal-body">
+                <div class="tableList">
+                    <table width="95%" cellpadding="0" cellspacing="0" id="issueTable" class="tableStyle tableStyle1 dataTable mg20 mt20">
+                        <thead>
+                            <tr role="row">
+                                <th><input type="checkbox" class="checkall" /></th>
+                                <th>title</th>
+                                <th>update time</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancle</button>
+                <button id="downNB" type="button"  class="btn btn-primary">Download</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function htmlEncodeByRegExp(op) {
+        if (op != null) {
+            var s = "";
+            if (op.length == 0) return "";
+            s = op.replace(/&/g, "&amp;");
+            s = s.replace(/</g, "&lt;");
+            s = s.replace(/>/g, "&gt;");
+            s = s.replace(/ /g, "&nbsp;");
+            s = s.replace(/\'/g, "&#39;");
+            s = s.replace(/\"/g, "&quot;");
+            return s;
+        } else {
+            return "";
+        }
+    }
+    function htmlDecodeByRegExp(op) {
+        if (op != null) {
+            var s = "";
+            if (op.length == 0) return "";
+            s = op.replace(/&amp;/g, "&");
+            s = s.replace(/&lt;/g, "<");
+            s = s.replace(/&gt;/g, ">");
+            s = s.replace(/&nbsp;/g, " ");
+            s = s.replace(/&#39;/g, "\'");
+            s = s.replace(/&quot;/g, "\"");
+            return s;
+        } else {
+            return "";
+        }
+    }
+    $(document).ready(function () {
+        $('.form_datetime').datetimepicker({
+            minView: "hour",
+            lang: "ch",
+            format: 'yyyy-mm-dd hh:ii',
+            timepicker: false,
+            yearStart: 2000,
+            yearEnd: 2050,
+            todayButton: false
+        });
+
+        $('.form_datetime').datetimepicker('update', new Date());
+
+
+        if ($("#hidIsoutSide").val() == "1") {
+            //如果是外部数据
+            $("#dateSelect").show();
+        } else {
+            //绑定下载列表数据
+            $('#issueTable').DataTable({
+                "sDom": "rtip",
+                "bProcessing": false,
+                "bServerSide": false,
+                "bFilter": false,
+                "bPaginate": false,
+                "bLengthChange": false,
+                "bAutoWidth": false,
+                "bInfo": false,
+                "ajax": {
+                    url: "/Data/GetDataAccessorylList?detailID=" + $('#hidDataId').val(),
+                    type: "POST"
+                },
+                "sAjaxDataProp": "Results",//保存列表的字段
+                "aoColumns": [
+                    {
+                        "sClass": "text-center",
+                        "mData": "ID",
+                        "render": function (data, type, full, meta) {
+                            return '<input type="checkbox"  class="checkchild"  value="' + data + '" />';
+                        },
+                        "bSortable": false
+                    },
+                    { "mData": 'Data_Accessory_Address', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                    { "mData": 'UpdateDateTime', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' }],
+                "aoColumnDefs": [
+               {
+                   "targets": [1],
+                   "data": "Data_Accessory_Address",
+                   "render": function (data, type, full) {
+                       return data;
+                       //  return "<a href='/Data/DataDetailContentInfo/" + $("#infoid").val() + "'>" + data + "</a>";
+                   }
+               },
+                {
+                    "targets": [2],
+                    "data": "UpdateDateTime",
+                    "render": function (data, type, full) {
+                        return formatTime(data);
+                    }
+                }
+                ]
+            });
+
+            //全选下载表
+            $(".checkall").click(function () {
+                var check = $(this).prop("checked");
+                $(".checkchild").prop("checked", check);
+            });
+            //下载数据
+            $("#downNB").click(function () {
+                var jsonData = "";
+                $(".checkchild:checked").each(function () {
+                    jsonData += $(this).val() + ",";
+                });
+                if (jsonData.length > 0) {
+                    window.location.href = "/Data/DownContentLoadFiles?ids=" + jsonData;
+                } else {
+                    $.alert({
+                        title: "Message",
+                        content: "Please select data to download",
+                    });
+                }
+            });
+
+            $("#dateSelect").hide();
+        }
+        
+        $('#Btnvisualization').click(function () {
+            var id = $("#hidDataId").val();
+            window.location.href = "/Python/"+id+".html";
+        });
+        
+        $('#Btnanalysis').click(function () {
+            var id = $("#hidDataId").val();
+            window.location.href = "http://gpwin2008r2.chinacloudapp.cn:5000/" + id;
+        });
+
+        $('#Btndownload').click(function () {
+            var id = $("#hidDataId").val();
+            if ($("#hidIsoutSide").val() == "1") {
+                var startTime = $('#startTime').val();
+                var endTime = $("#endTime").val();
+                window.location.href = "/Data/DownLoadOutsideFiles?id=" + id + "&starttime=" + startTime + "&endtime=" + endTime;
+            } else {
+                $('#myModalxz').modal('toggle');
+            }
+            //else {
+            //    window.location.href = "/Data/DownLoadFiles?ids=" + id + ",";
+            //}
+        });
+
+        //if ($("#Data_Detail_Desc").val().length > 0) {
+        //    ///富文本框
+        //    CKEDITOR.replace('Data_Detail_Desc', {
+        //        toolbarStartupExpanded: false,
+        //        toolbar: "MyToolbar",
+        //        readOnly: true,
+        //        toolbarCanCollapse: true
+        //    });
+
+        //    CKEDITOR.on('instanceReady', function (e) {
+        //        $(".con_article.con_article1").css("display", "block");
+        //        $("#cke_1_top").css("display", "none");
+        //        $("#cke_1_bottom").css("display", "none");
+        //        var ckcontentsHeight = $($(".cke_wysiwyg_frame").contents().get(0)).find(".cke_editable").height() + 50;
+        //        $("#cke_1_contents").css("height", ckcontentsHeight).css("text-indent", 0);
+        //        $("#cke_Data_Detail_Desc").css("border", "0").css("box-shadow", "0 0 0px rgba(0,0,0,.15)");
+        //        $($(".cke_wysiwyg_frame").contents().get(0)).find(".cke_editable").find("img").css("max-width", 690);
+        //        $($(".cke_wysiwyg_frame").contents().get(0)).find(".cke_editable").css("margin", 0)
+        //        $("#cke_Data_Detail_Desc").css("border", "0px");
+        //    });
+        //    CKEDITOR.instances.Data_Detail_Desc.setData(htmlDecodeByRegExp($("#Data_Detail_Desc").val()));
+        //} else {
+        //    $("#Data_Detail_Desc").hide();
+        //}
+        
+        $("#BtnContentInfo").click(function(){
+            $('#DataContentInfoModal').modal('toggle');
+            $("#LabData_Detail_Desc").html(htmlDecodeByRegExp($("#hidData_Detail_Desc").val()));
+        });
+
+        //-------------------2.动态获取列和数据------------------
+        
+        $.ajax({
+            url:'/Data/GetData',
+            type:'post',
+            success:function(data,textStatus, jqXHR)
+            {
+                if(data =="" || data == null)
+                {
+                    alert("请联系管理员配置读取数据的脚本！！！");
+                    return;
+                }
+                var jsondata= JSON.parse(data);
+                if(jsondata != null || jsondata != '')
+                {                    
+                    $('#DataList').DataTable( {
+                        "sDom": "rtip",
+                        "bProcessing": true,
+                        sPaginationType: "full_numbers",
+                        destroy:true,
+                        "bServerSide": false,
+                        "bFilter": false,
+                        "bPaginate": true,
+                        "bLengthChange": false,
+                        "bAutoWidth": true,
+                        "bInfo": false,
+                        "scrollX": true,
+                        "aoColumns":jsondata.columns,
+                        data: jsondata.data
+                    } );
+                }
+            },
+            error:function()
+            {
+                alert("error"); 
+            }
+        })
+        
+    });
+
+
+
+    function LoadData()
+    {
+        var search1 = "";
+        var search2 = "";
+        var search3 = "";
+        var search4 = "";
+        var search5 = "";
+        var search6 = "";
+        if('@DataDetailContentModel.SearchColumns1' !='')
+        {
+            search1 = $("#txtSearchColumns1").val();
+        }
+        if('@DataDetailContentModel.SearchColumns2' !='')
+        {
+            search2 = $("#txtSearchColumns2").val();
+        }
+        if('@DataDetailContentModel.SearchColumns3' !='')
+        {
+            search3 = $("#txtSearchColumns3").val();
+        }
+        if('@DataDetailContentModel.SearchColumns4' !='')
+        {
+            search4 = $("#txtSearchColumns4").val();
+        }
+        if('@DataDetailContentModel.SearchColumns5' !='')
+        {
+            search5 = $("#txtSearchColumns5").val();
+        }
+        if('@DataDetailContentModel.SearchColumns6' !='')
+        {
+            search6 = $("#txtSearchColumns6").val();
+        }
+        var data = {
+            search1:search1,
+            search2:search2,
+            search3:search3,
+            search4:search4,
+            search5:search5,
+            search6:search6
+        }
+
+        $.ajax({
+            url:'/Data/GetData',
+            type:'post',
+            data:data,
+            success:function(data,textStatus, jqXHR)
+            {
+                var jsondata= JSON.parse(data);
+                if(jsondata != null || jsondata != '')
+                {        
+                    //$('#DataList').DataTable().fnDestroy()
+                    $('#DataList').DataTable( {
+                        "sDom": "rtip",
+                        "bProcessing": true,
+                        sPaginationType: "full_numbers",
+                        destroy:true,
+                        "bServerSide": false,
+                        "bFilter": false,
+                        "bPaginate": true,
+                        "bLengthChange": false,
+                        "bAutoWidth": true,
+                        "bInfo": false,
+                        "scrollX": true,
+                        "aoColumns":jsondata.columns,
+                        data: jsondata.data
+                    } );
+                }
+            },
+            error:function()
+            {
+                alert("error"); 
+            }
+        })
+    }
+
+</script>

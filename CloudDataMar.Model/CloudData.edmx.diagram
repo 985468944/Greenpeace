@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b1071927f2f14c5b94d5f2013bce3755" Name="Diagram1">
+        <EntityTypeShape EntityType="clouddataModel.data_accessory_info" Width="1.875" PointX="7.5" PointY="1.5" />
+        <EntityTypeShape EntityType="clouddataModel.data_announce_info" Width="2" PointX="0.5" PointY="4.25" />
+        <EntityTypeShape EntityType="clouddataModel.data_application" Width="1.5" PointX="2.75" PointY="5.75" />
+        <EntityTypeShape EntityType="clouddataModel.data_detail_info" Width="1.5" PointX="5.25" PointY="1" />
+        <EntityTypeShape EntityType="clouddataModel.data_info" Width="1.5" PointX="3" PointY="1.25" />
+        <EntityTypeShape EntityType="clouddataModel.data_special" Width="1.5" PointX="4.75" PointY="5.75" />
+        <EntityTypeShape EntityType="clouddataModel.data_type_info" Width="1.5" PointX="0.75" PointY="1.375" />
+        <EntityTypeShape EntityType="clouddataModel.user_info" Width="1.5" PointX="6.875" PointY="6.125" />
+        <EntityTypeShape EntityType="clouddataModel.user_role" Width="1.5" PointX="8.625" PointY="6.25" />
+        <AssociationConnector Association="clouddataModel.fk_data_detail_accessory_info" />
+        <AssociationConnector Association="clouddataModel.fk_data_detail_info" />
+        <AssociationConnector Association="clouddataModel.fk_data_info_type_info" />
+        <EntityTypeShape EntityType="clouddataModel.data_statistic_info" Width="1.5" PointX="9.5" PointY="6.875" />
+        <EntityTypeShape EntityType="clouddataModel.data_statistics" Width="1.5" PointX="0.75" PointY="8.125" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

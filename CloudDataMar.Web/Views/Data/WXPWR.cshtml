@@ -1,0 +1,143 @@
+﻿@{
+    ViewBag.Title = "WXPWR";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, initial-scale=1.0">
+    <title>危化品与污染</title>
+    @Styles.Render("~/Content/Css/style.css")
+    <script src="~/Content/plugins/jquery-1.10.2.min.js"></script>
+    <link href="~/Content/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Content/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+</head>
+<body class="bodyBg">
+    <header class="insideHeader">
+        <div class="headTop">
+            <div class="menu"></div>
+            <div class="login">
+                @if (@ViewData["UserName"] != "" && @ViewData["UserName"] != null)
+                {
+                    <label style="color:#000">@ViewData["UserName"]</label>
+                    <a role="button" href="#" title="Sign Out" style="padding: 11px 7px 10px 15px !important" data-toggle="modal" data-target="#myModal">
+                        <i class="fa fa-sign-out fa-2x" ></i>
+                    </a>
+                }
+                else
+                {
+                    <a href="/Account/Login" class="wdl">Log in</a>
+                    <a href="/Account/Register" class="wdl">Sign up</a>
+                }
+            </div>
+        </div>
+        <div class="brand">
+            <a href="#"><img src="~/Content/Images/logo_black.jpg" alt="" /></a>
+        </div>
+    </header>
+    <div class="search">
+        <div class="searchBg"></div>
+        <div class="searchList">
+            <input type="text" class="text" value="请输入要搜索的关键字">
+            <input type="button" class="btn">
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class="insideCon">
+            <div class="title">
+                <h1>危化品与污染<span>Toxics</span></h1>
+            </div>
+            <div class="content">
+                <div class="businessInfo">
+                    <ul class="picList">
+                        <li>
+                            <div class="img">
+                                <img src="~/Content/Images/pic9.jpg" alt="">
+                            </div>
+                            <h1><a href="#">企业污染排放</a></h1>
+                            <div class="text">
+                                这是一段关于当前内容的简介，这是一段关于当前内容的简介，这是一段关于当前内容的简介，这是一段关于当前内容的简介
+                            </div>
+                        </li>
+                        <li>
+                            <div class="img">
+                                <img src="~/Content/Images/pic8.jpg" alt="">
+                            </div>
+                            <h1><a href="#">企业危化品</a></h1>
+                            <div class="text">
+                                这是一段关于当前内容的简介，这是一段关于当前内容的简介，这是一段关于当前内容的简介，这是一段关于当前内容的简介
+                            </div>
+                        </li>
+                        <li class="mr0">
+                            <div class="img">
+                                <img src="~/Content/Images/pic10.jpg" alt="">
+                            </div>
+                            <h1><a href="#">污染处理厂</a></h1>
+                            <div class="text">
+                                这是一段关于当前内容的简介，这是一段关于当前内容的简介，这是一段关于当前内容的简介，这是一段关于当前内容的简介
+                            </div>
+                        </li>
+                        <li>
+                            <div class="img">
+                                <img src="~/Content/Images/pic11.jpg" alt="">
+                            </div>
+                            <h1><a href="#">垃圾焚烧</a></h1>
+                            <div class="text">
+                                这是一段关于当前内容的简介，这是一段关于当前内容的简介，这是一段关于当前内容的简介，这是一段关于当前内容的简介
+                            </div>
+                        </li>
+                        <li class="mr0">
+                            <div class="img">
+                                <img src="~/Content/Images/pic12.jpg" alt="">
+                            </div>
+                            <h1><a href="#">危化品仓库</a></h1>
+                            <div class="text">
+                                这是一段关于当前内容的简介，这是一段关于当前内容的简介，这是一段关于当前内容的简介，这是一段关于当前内容的简介
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="logo_foot">
+            <a href="#"><img src="~/Content/Images/logo_small.png" width="175" alt=""></a>
+        </div>
+        <div class="center">
+            <div class="menu_foot">
+                <a href="#">帮助中心</a>
+                <a href="#">法律声明</a>
+                <a href="#">关于我们</a>
+                <a href="#">联系我们</a>
+                <a href="#">合作伙伴</a>
+            </div>
+            <div class="copyright">
+                绿色和平 中央编号：00915341<br />
+                2016 北京00915341 京ICP备14007358号-1 / 京公网安备11010802014104号
+            </div>
+            <div class="partner">
+                <a href="#">
+                    <img src="~/Content/Images/weixin.jpg" width="30" alt="">
+                </a>
+                <a href="#">
+                    <img src="~/Content/Images/weibo.jpg" width="30" alt="">
+                </a>
+            </div>
+        </div>
+        <div class="right">
+            <dl>
+                <dt>客服邮箱</dt>
+                <dd>customerservice@reorientgroup.com</dd>
+            </dl>
+            <dl>
+                <dt>客服电话</dt>
+                <dd>400-000-0000（时间：9：00-21：00）</dd>
+            </dl>
+        </div>
+    </footer>
+</body>
+</html>

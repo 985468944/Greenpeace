@@ -1,0 +1,127 @@
+﻿@model CloudDataMar.Model.user_info
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .insideHeader {
+        visibility:hidden;
+    }
+</style>
+<div class="wrapper">
+    <div class="insideCon insideBg">
+        <div class="title">
+            <h1 style="line-height:none;">登录</h1>
+        </div>
+        <div class="content pd20">
+            <div class="loginBox">
+                <div class="img">
+                </div>
+                <form id="saveform" name="saveform" method="Post" role="form">
+                    <div class="row form-group">
+                        <div class="col-sm-offset-1 col-sm-7">
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "请输入用户名" })
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-offset-1 col-sm-7">
+                            @Html.TextBoxFor(m => m.UserPassword, new { @class = "form-control", @type = "password", @placeholder = "请输入密码" })
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-offset-1 col-sm-7">
+                            <button id="btnLogin" type="submit" class="form-control btn btn-default">登录</button>
+                        </div>
+                    </div>
+                    @*<div class="row form-group">
+                        <div class="col-sm-offset-1 col-sm-7">
+                            <button id="btnRegister" type="button" class="form-control btn btn-default">注册</button>
+                        </div>
+                    </div>*@
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            ValidateForm();
+        });
+
+        function ValidateForm() {
+            $('#saveform').validate({
+                rules: {
+                    UserName: {
+                        required: true
+                    },
+                    UserPassword: {
+                        required: true
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    error.appendTo(element.parent().next());
+                },
+            });
+        }
+
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|)" + name + "=([^]*)(|$)");  
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) {
+                return unescape(r[2]);
+            }
+            return null; //返回参数值
+        }
+
+        $.validator.setDefaults({
+            submitHandler: function (form) {
+                $(form).ajaxSubmit({
+                    type: "Post",
+                    url: "/Account/LoginInfo",
+                    success: function (data) {
+                        if (data.indexOf("suc") > -1 && getUrlParam("ReturnUrl") != null) {
+                            var param = getUrlParam("ReturnUrl");
+                            //var crParam = param.split('?');
+                            //var controllName = crParam[0].split('/')[0];
+                            //var actionName = crParam[0].split('/')[1];
+                            //var crParam2 = crParam[1].split('&');
+                            //for (var i = 0; i < crParam2.Length; i++) {
+                            //}
+                            if (param.indexOf("DownLoadFiles") > -1) {
+                                window.location.href = "@Url.Action("Home", "AdminAccount")";
+                            } else {
+                                window.location.href = "../" + param;
+                            }
+                        }
+                        else  if (data == "suc") {
+                            window.location.href = "@Url.Action("UserList", "BaseMar")";
+                        } else if (data == "suc2") {
+                            window.location.href = "@Url.Action("Home", "AdminAccount")";
+                        }
+                        else if (data == "nouser") {
+                            $.alert({
+                                title: 'System',
+                                content: '用户名或密码不正确',
+                                confirm: function () {
+                                }
+                            });
+                        }
+                        else {
+                            $.alert({
+                                title: 'System',
+                                content: '用户名或密码不正确',
+                                confirm: function () {
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+        $("#btnRegister").click(function () {
+            window.location.href = '@Url.Action("Register", "Account")';
+        });
+    </script>
+}

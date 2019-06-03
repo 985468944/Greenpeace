@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "专题管理";
+    Layout = "~/Views/Shared/_IndexLayout.cshtml";
+}
+
+<div class="container" style="margin: 50px 0px;">
+    <div class="insideCon insideBg">
+        <div class="title" style="margin-top:-20px;margin-left:-15px">
+            <h1>数据专题管理</h1>
+            <a href='/DataManage/EditDataApplication' data-toggle='mainFrame' style="color:#fff;" class="btn btn-primary btn-adddata">新增数据专题</a>
+        </div>
+        <div class="tableList">
+            <table cellpadding="0" cellspacing="0" id="issueTable" class="tableStyle tableStyle1 dataTable mg20 mt20">
+                <thead>
+                    <tr role="row">
+
+                        <th class="col-lg-2 col-md-2">专题名</th>
+                        <th class="col-lg-2 col-md-2">状态</th>
+                        <th class="col-lg-2 col-md-2">访问量</th>
+                        <th class="col-lg-2 col-md-2">下载量</th>
+                        <th class="col-lg-1 col-md-1">图片</th>
+                        <th class="col-lg-2 col-md-2">Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+    $.fn.dataTable.ext.errMode = function (s, h, m) { }
+    var issueTable;
+    $(function () {
+        issueTable = $('#issueTable').DataTable({
+            "sDom": "rtip",
+            "bProcessing": false,
+            "bServerSide": false,
+            "bFilter": false,
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bAutoWidth": true,
+            "bInfo": false,
+            "ajax": {
+                url: "/DataManage/GetApplitionList",
+                type: "POST"
+            },
+            "sAjaxDataProp": "Results",//保存列表的字段
+            "aoColumns": [
+
+                { "mData": 'Data_Application_Name', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+              { "mData": 'Data_IsPublish', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                { "mData": 'PageViewCount', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+              { "mData": 'DownloadCount', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                  { "mData": 'Data_Image', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                { "mData": 'Action', 'sDefaultContent': '', "sClass": "left", "bSortable": false }
+            ],
+            "aoColumnDefs": [
+        {
+            "targets": [1], // 目标列位置，下标从0开始
+            "data": "IsPublish", // 数据列名
+            "render": function (data, type, full) { // 返回自定义内容
+                return data == 1 ? "已发布" : "未发布";
+            }
+        },
+            {
+                "render": function (data, type, row) {
+                    return "<img src='/Content/UploadImages/" + row.Data_Image + "' width='60px'/>"
+                },
+                "targets": 4
+            }
+
+            ],
+            "aaSorting": [[1, "asc"]]
+        });
+    })
+
+    $(document).on("click", ".btn-delete", function () {
+        var $this = $(this);
+        $.confirm({
+            title: 'Confirm!',
+            content: 'Comfirm to Delete this DataDetail？',
+            confirm: function () {
+                $.get($this.attr("href"), null, function (data) {
+                    if (data.State == "Success") {
+                        $.alert({
+                            title: '系统提示',
+                            content: '删除成功！',
+                            confirm: function () {
+                                window.location.href = '@Url.Action("DataApplicationManage", "DataManage")';
+                            }
+                        });
+                    }
+                    else if (data.State == "Exception") {
+                        $.alert({
+                            title: data.State,
+                            content: data.Message,
+                            confirm: function () {
+                                window.location.href = '@Url.Action("DataApplicationManage", "DataManage")';
+                            }
+                        });
+                    }
+                    else {
+                        $.alert({
+                            title: data.State,
+                            content: data.Message,
+                            confirm: function () {
+                              window.location.href = '@Url.Action("DataSpecialManage", "DataManage")';
+                            }
+                        });
+                    }
+                });
+            },
+            cancel: function () {
+             window.location.href = '@Url.Action("DataApplicationManage", "DataManage")';
+            }
+        });
+        return false;
+    });
+
+    </script>
+}

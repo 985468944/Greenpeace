@@ -1,0 +1,205 @@
+﻿@model CloudDataMar.Model.data_type_info
+@{
+    ViewBag.Title = "详细信息";
+    Layout = "~/Views/Shared/_ContentLayout.cshtml";
+}
+<div style="width: 2000px;margin:-60px 0px 61px -300px; background-color: white; height: 60px"></div>
+<div class="search">
+    <div class="searchBg"></div>
+    <div class="searchList">
+        <input type="text" class="text" id="text-search" placeholder="Please enter the searching key words">
+        <input type="button" class="btn" id="btn-search">
+    </div>
+</div>
+<div  style="width:100%;">
+    <div class="insideCon insideBg">
+        <div class="title">
+            <h1>
+                <input type="hidden" value="@ViewData["InfoID"]" id="infoid" />
+                <a style = "position:static;righte:Opx;" href="http://gpwin2008r2.chinacloudapp.cn">HomePage</a> -
+                <a style="position:static;righte:Opx;" href="/Data/DataInfo/@ViewData["Data_Type_ID"]">@ViewData["Data_Type_Name"]</a> -
+                <a style="position:static;righte:Opx;" href="/Data/DataDetailInfo?InfoID=@ViewData["InfoID"]">@ViewData["Data_Info_Name"]</a>
+            </h1>
+        </div>
+
+        <div class="content pd20">
+            <div class="mt20">
+                @*<span><input type="checkbox"><span>全选</span></span>*@
+                @*<span style="border-bottom: 1px solid #e6e9ee; border-width: 3px; margin-left: -16px; font-family: 黑体; border-bottom-color:gray;">全部</span>*@
+                <span style="margin-left:20px;">日期：</span><input id="startTime" class="form_datetime" value="@DateTime.Now.ToShortDateString()"> <span>至</span> <input id="endTime" class="form_datetime" value="@DateTime.Now.ToShortDateString()">
+                <button class="btn btn-primary" style="margin-left:50px;" id="btnSearch">搜索</button>
+            </div>
+        </div>
+        
+        <div class="line"></div>
+        <div class="tableList">
+            <table width="95%" cellpadding="0" cellspacing="0" id="issueTable" class="tableStyle tableStyle1 dataTable mg20 mt20">
+                <thead>
+                    <tr role="row">
+                        <th><input type="checkbox" class="checkall" />select all</th>
+                        <th>title</th>
+                        <th>data label</th>
+                        <th>update time</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="notic mg20 mt20">
+            <span>*</span>Please multiple download if more than 10 items at one time.
+        </div>
+        <div class="btnList mg20 mt20">
+            <span class="btn col-sm-2" style="display:block" id="Btndownload"><a href="#" class="btn-download">download source data</a></span>
+            <span class="btn col-sm-2" style="display:none" id="map"><a href="http://gpwin2008r2.chinacloudapp.cn:5002/map">view in map</a></span>
+            <span class="btn col-sm-2" style="display:none" id="Btnvisualization"><a href="#">visualization</a></span>
+            <span class="btn col-sm-2" style="display:none"><a href="#">data analysis</a></span>
+            <br />
+            <br />
+            <br />
+            <script>
+                if ($('#infoid').val() == 12){
+                    document.getElementById("map").style.display = "block";
+                }
+                else if(($('#infoid').val() == 8)){
+                    document.getElementById("Btnvisualization").style.display = "block";
+                    
+                }
+                else{
+                    document.getElementById("map").style.display = "none";
+                    document.getElementById("Btnvisualization").style.display = "none";
+                }
+            </script>
+        </div>
+    </div>
+</div>
+@section scripts{ 
+<script type="text/javascript">
+    $.fn.dataTable.ext.errMode = function (s, h, m) { }
+    var table;
+    $(function () {
+        $('.form_datetime').datetimepicker({
+            minView: "hour",
+            lang: "ch",
+            format: 'yyyy-mm-dd hh:ii',
+            timepicker: false,
+            yearStart: 2000,
+            yearEnd: 2050,
+            todayButton: false 
+        });
+
+        $('.form_datetime').datetimepicker( 'update', new Date());
+
+        var isFristPage=true;//是否首次访问
+        table = $('#issueTable').DataTable({
+            "sDom": "rtip",
+            "bProcessing": false,
+            "bServerSide": true,
+            "bFilter": false,
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bAutoWidth": false,
+            "bInfo": false,
+            "ajax": {
+                url: "/Data/GetDataDetailList?InfoID=" + $('#infoid').val(),
+                type: "POST",
+                data: function (d) {
+                    if(!isFristPage){//是否首次访问
+                        d.startTime = $("#startTime").val();
+                        d.endTime=$("#endTime").val();
+                    }
+                }
+            },
+            "sAjaxDataProp": "Results",//保存列表的字段
+            "aoColumns": [
+                {
+                    "sClass": "text-center",
+                    "mData": "ID",
+                    "render": function (data, type, full, meta) {
+                        return '<input type="checkbox"  class="checkchild"  value="' + data + '" />';
+                    },
+                    "bSortable": false
+                },
+                { "mData": 'Data_Detail_Name', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                { "mData": 'Data_Detail_Source', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                { "mData": 'UpdateDateTime', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' }],
+            "aoColumnDefs": [
+           {
+               "targets": [1], 
+               "data": "Data_Detail_Name",
+               "render": function (data, type, full) { 
+                   return "<a href='/Data/DataDetailContentInfo/"+full.ID+"'>"+data+"</a>";
+               }
+           },
+            {
+                "targets": [3], 
+                "data": "UpdateDateTime",
+                "render": function (data, type, full) { 
+                    return formatTime(data);
+                }
+            }
+            ]
+        });
+        
+        $("#btnSearch").bind("click", function () {
+            isFristPage=false;
+            table.draw();
+        });
+    });
+
+    $(document).on('click', '#btn-search', function () {
+        var stext = $('#text-search').val();
+        window.location.href = "/Data/DataSearch?searchtype=Home&searchtext=" + stext;
+    });
+    $(".checkall").click(function () {
+        var check = $(this).prop("checked");
+        $(".checkchild").prop("checked", check);
+    });
+
+    $('.btn-download').click(function () {
+        var dataType=@ViewData["IsOutSide"];
+        if(dataType==1){
+            //如果是外部数据
+            $.alert({
+                title: 'Message',
+                content: '外部数据请进入数据详情页下载',
+                confirm: function () {
+                }
+            });
+            //var startTime = $('#startTime').val();
+            //var endTime=$("#endTime").val();
+            //window.location.href = "/Data/DownLoadOutsideFiles?id=" + $("#infoid").val()+"&startTime="+startTime+"&endTime="+endTime;
+        }else{
+            var jsonData = "";
+            $(".checkchild:checked").each(function () {
+                jsonData += $(this).val() + ",";
+            });
+            if (jsonData.length > 0) {
+                window.location.href = "/Data/DownLoadFiles?ids=" + jsonData;
+            }else{
+                $.alert({
+                    title: "Message",
+                    content: "请勾选要下载的数据",
+                });
+            }
+        }
+    });
+    
+    $('#Btnvisualization').click(function () {
+        var id = $('#infoid').val();
+        window.location.href = "/Python/"+id+".html";
+    });
+    
+    @*$(document).ready(function () {
+        var dataType=@ViewData["IsOutSide"];
+        if(dataType==1){
+             $(".tableList").hide();
+             $(".notic").hide();
+             $(":checkbox").hide();
+        }else{
+             $(".tableList").show();
+             $(".notic").show();
+             $(":checkbox").show();
+        }
+
+    })*@
+</script>
+}

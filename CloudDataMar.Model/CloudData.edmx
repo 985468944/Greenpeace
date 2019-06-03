@@ -1,0 +1,595 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="clouddataModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="clouddataModelStoreContainer">
+          <EntitySet Name="data_accessory_info" EntityType="clouddataModel.Store.data_accessory_info" store:Type="Tables" Schema="clouddata" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="data_announce_info" EntityType="clouddataModel.Store.data_announce_info" store:Type="Tables" Schema="clouddata" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="data_application" EntityType="clouddataModel.Store.data_application" store:Type="Tables" Schema="clouddata" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="data_detail_info" EntityType="clouddataModel.Store.data_detail_info" store:Type="Tables" Schema="clouddata" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="data_info" EntityType="clouddataModel.Store.data_info" store:Type="Tables" Schema="clouddata" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="data_special" EntityType="clouddataModel.Store.data_special" store:Type="Tables" Schema="clouddata" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="data_statistics" EntityType="clouddataModel.Store.data_statistics" store:Type="Tables" Schema="clouddata" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="data_type_info" EntityType="clouddataModel.Store.data_type_info" store:Type="Tables" Schema="clouddata" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="user_info" EntityType="clouddataModel.Store.user_info" store:Type="Tables" Schema="clouddata" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="user_role" EntityType="clouddataModel.Store.user_role" store:Type="Tables" Schema="clouddata" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <AssociationSet Name="fk_data_detail_accessory_info" Association="clouddataModel.Store.fk_data_detail_accessory_info">
+            <End Role="data_detail_info" EntitySet="data_detail_info" />
+            <End Role="data_accessory_info" EntitySet="data_accessory_info" />
+          </AssociationSet>
+          <AssociationSet Name="fk_data_detail_info" Association="clouddataModel.Store.fk_data_detail_info">
+            <End Role="data_info" EntitySet="data_info" />
+            <End Role="data_detail_info" EntitySet="data_detail_info" />
+          </AssociationSet>
+          <AssociationSet Name="fk_data_info_type_info" Association="clouddataModel.Store.fk_data_info_type_info">
+            <End Role="data_type_info" EntitySet="data_type_info" />
+            <End Role="data_info" EntitySet="data_info" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="data_accessory_info">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Data_Detail_ID" Type="int" />
+          <Property Name="Data_Accessory_Describe" Type="varchar" MaxLength="500" />
+          <Property Name="Data_Accessory_Address" Type="varchar" MaxLength="500" />
+          <Property Name="CreateDateTime" Type="datetime" />
+          <Property Name="UpdateDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="data_announce_info">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="varchar" MaxLength="500" />
+          <Property Name="Content" Type="mediumtext" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="100" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="PublishBy" Type="varchar" MaxLength="100" />
+          <Property Name="PublishDate" Type="datetime" />
+          <Property Name="IsPublish" Type="int" />
+        </EntityType>
+        <EntityType Name="data_application">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Data_Application_Name" Type="varchar" MaxLength="200" />
+          <Property Name="Data_Application_Content" Type="varchar" MaxLength="500" />
+          <Property Name="CreateDateTime" Type="datetime" />
+          <Property Name="UpdateDateTime" Type="datetime" />
+          <Property Name="Data_IsPublish" Type="int" />
+          <Property Name="PageViewCount" Type="int" />
+          <Property Name="DownloadCount" Type="int" />
+          <Property Name="Data_Image" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="data_detail_info">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Data_Info_ID" Type="int" />
+          <Property Name="Data_Detail_Name" Type="varchar" MaxLength="500" />
+          <Property Name="CreateDateTime" Type="datetime" />
+          <Property Name="UpdateDateTime" Type="datetime" />
+          <Property Name="Data_Detail_Source" Type="varchar" MaxLength="500" />
+          <Property Name="Data_Detail_Script" Type="text" />
+          <Property Name="Data_Detail_Desc" Type="mediumtext" />
+          <Property Name="Data_IsPublish" Type="int" />
+          <Property Name="Data_IsOutSide" Type="int" />
+          <Property Name="SearchColumns1" Type="varchar" MaxLength="30" />
+          <Property Name="SearchColumns2" Type="varchar" MaxLength="30" />
+          <Property Name="SearchColumns3" Type="varchar" MaxLength="30" />
+          <Property Name="SearchColumns4" Type="varchar" MaxLength="30" />
+          <Property Name="SearchColumns5" Type="varchar" MaxLength="30" />
+          <Property Name="SearchColumns6" Type="varchar" MaxLength="30" />
+          <Property Name="SearchContidion1" Type="varchar" MaxLength="300" />
+          <Property Name="SearchContidion2" Type="varchar" MaxLength="300" />
+          <Property Name="SearchContidion3" Type="varchar" MaxLength="300" />
+          <Property Name="SearchContidion4" Type="varchar" MaxLength="300" />
+          <Property Name="SearchContidion5" Type="varchar" MaxLength="300" />
+          <Property Name="SearchContidion6" Type="varchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="data_info">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Data_Type_ID" Type="int" />
+          <Property Name="Data_Info_Name" Type="varchar" MaxLength="500" />
+          <Property Name="Data_Info_Image" Type="varchar" MaxLength="500" />
+          <Property Name="Data_Info_Describe" Type="varchar" MaxLength="500" />
+          <Property Name="CreateDateTime" Type="datetime" />
+          <Property Name="UpdateDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="data_special">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Data_Special_Name" Type="varchar" MaxLength="255" />
+          <Property Name="Data_Special_Url" Type="varchar" MaxLength="255" />
+          <Property Name="Data_Special_Desc" Type="mediumtext" />
+          <Property Name="CreateDateTime" Type="datetime" />
+          <Property Name="UpdateDateTime" Type="datetime" />
+          <Property Name="Data_Image" Type="varchar" MaxLength="255" />
+          <Property Name="DownloadCount" Type="int" />
+          <Property Name="PageViewCount" Type="int" />
+          <Property Name="Data_IsPublish" Type="int" />
+        </EntityType>
+        <EntityType Name="data_statistics">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="data_catagory" Type="uint" Nullable="false" />
+          <Property Name="item_id" Type="uint" Nullable="false" />
+          <Property Name="browse_quantity" Type="uint" Nullable="false" />
+          <Property Name="download_quantity" Type="uint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="data_type_info">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Data_Type_Name" Type="varchar" MaxLength="500" />
+          <Property Name="Data_Type_Image" Type="varchar" MaxLength="500" />
+          <Property Name="Data_Type_Describe" Type="varchar" MaxLength="500" />
+          <Property Name="CreateDateTime" Type="datetime" />
+          <Property Name="UpdateDateTime" Type="datetime" />
+          <Property Name="Data_Type_OrderNum" Type="int" />
+        </EntityType>
+        <EntityType Name="user_info">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="varchar" MaxLength="200" />
+          <Property Name="UserName" Type="varchar" MaxLength="200" />
+          <Property Name="UserPassword" Type="varchar" MaxLength="200" />
+          <Property Name="UserLevel" Type="int" />
+          <Property Name="TelePhone" Type="varchar" MaxLength="11" />
+          <Property Name="EMail" Type="varchar" MaxLength="200" />
+          <Property Name="Position" Type="varchar" MaxLength="200" />
+          <Property Name="WorkUnits" Type="varchar" MaxLength="200" />
+          <Property Name="CreateDateTime" Type="datetime" />
+          <Property Name="UpdateDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="user_role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="varchar" MaxLength="200" />
+          <Property Name="RoleCode" Type="int" />
+          <Property Name="RoleDownTime" Type="int" />
+        </EntityType>
+        <Association Name="fk_data_detail_accessory_info">
+          <End Role="data_detail_info" Type="clouddataModel.Store.data_detail_info" Multiplicity="0..1" />
+          <End Role="data_accessory_info" Type="clouddataModel.Store.data_accessory_info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="data_detail_info">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="data_accessory_info">
+              <PropertyRef Name="Data_Detail_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_data_detail_info">
+          <End Role="data_info" Type="clouddataModel.Store.data_info" Multiplicity="0..1" />
+          <End Role="data_detail_info" Type="clouddataModel.Store.data_detail_info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="data_info">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="data_detail_info">
+              <PropertyRef Name="Data_Info_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_data_info_type_info">
+          <End Role="data_type_info" Type="clouddataModel.Store.data_type_info" Multiplicity="0..1" />
+          <End Role="data_info" Type="clouddataModel.Store.data_info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="data_type_info">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="data_info">
+              <PropertyRef Name="Data_Type_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="clouddataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="CloudDataContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="data_accessory_info" EntityType="clouddataModel.data_accessory_info" />
+          <EntitySet Name="data_announce_info" EntityType="clouddataModel.data_announce_info" />
+          <EntitySet Name="data_application" EntityType="clouddataModel.data_application" />
+          <EntitySet Name="data_detail_info" EntityType="clouddataModel.data_detail_info" />
+          <EntitySet Name="data_info" EntityType="clouddataModel.data_info" />
+          <EntitySet Name="data_special" EntityType="clouddataModel.data_special" />
+          <EntitySet Name="data_type_info" EntityType="clouddataModel.data_type_info" />
+          <EntitySet Name="user_info" EntityType="clouddataModel.user_info" />
+          <EntitySet Name="user_role" EntityType="clouddataModel.user_role" />
+          <AssociationSet Name="fk_data_detail_accessory_info" Association="clouddataModel.fk_data_detail_accessory_info">
+            <End Role="data_detail_info" EntitySet="data_detail_info" />
+            <End Role="data_accessory_info" EntitySet="data_accessory_info" />
+          </AssociationSet>
+          <AssociationSet Name="fk_data_detail_info" Association="clouddataModel.fk_data_detail_info">
+            <End Role="data_info" EntitySet="data_info" />
+            <End Role="data_detail_info" EntitySet="data_detail_info" />
+          </AssociationSet>
+          <AssociationSet Name="fk_data_info_type_info" Association="clouddataModel.fk_data_info_type_info">
+            <End Role="data_type_info" EntitySet="data_type_info" />
+            <End Role="data_info" EntitySet="data_info" />
+          </AssociationSet>
+          <EntitySet Name="data_statistics" EntityType="clouddataModel.data_statistics" />
+        </EntityContainer>
+        <EntityType Name="data_accessory_info">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Data_Detail_ID" Type="Int32" />
+          <Property Name="Data_Accessory_Describe" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Data_Accessory_Address" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDateTime" Type="DateTime" Precision="0" />
+          <Property Name="UpdateDateTime" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="data_detail_info" Relationship="clouddataModel.fk_data_detail_accessory_info" FromRole="data_accessory_info" ToRole="data_detail_info" />
+        </EntityType>
+        <EntityType Name="data_announce_info">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Content" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="0" />
+          <Property Name="PublishBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PublishDate" Type="DateTime" Precision="0" />
+          <Property Name="IsPublish" Type="Int32" />
+        </EntityType>
+        <EntityType Name="data_application">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Data_Application_Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Data_Application_Content" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDateTime" Type="DateTime" Precision="0" />
+          <Property Name="UpdateDateTime" Type="DateTime" Precision="0" />
+          <Property Name="Data_IsPublish" Type="Int32" />
+          <Property Name="PageViewCount" Type="Int32" />
+          <Property Name="DownloadCount" Type="Int32" />
+          <Property Name="Data_Image" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="data_detail_info">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Data_Info_ID" Type="Int32" />
+          <Property Name="Data_Detail_Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDateTime" Type="DateTime" Precision="0" />
+          <Property Name="UpdateDateTime" Type="DateTime" Precision="0" />
+          <Property Name="Data_Detail_Source" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Data_Detail_Script" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Data_Detail_Desc" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Data_IsPublish" Type="Int32" />
+          <Property Name="Data_IsOutSide" Type="Int32" />
+          <NavigationProperty Name="data_accessory_info" Relationship="clouddataModel.fk_data_detail_accessory_info" FromRole="data_detail_info" ToRole="data_accessory_info" />
+          <NavigationProperty Name="data_info" Relationship="clouddataModel.fk_data_detail_info" FromRole="data_detail_info" ToRole="data_info" />
+          <Property Type="String" Name="SearchColumns1" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SearchColumns2" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SearchColumns3" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SearchContidion1" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SearchContidion2" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SearchContidion3" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SearchColumns4" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SearchColumns5" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SearchColumns6" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SearchContidion4" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SearchContidion5" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SearchContidion6" MaxLength="300" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="data_info">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Data_Type_ID" Type="Int32" />
+          <Property Name="Data_Info_Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Data_Info_Image" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Data_Info_Describe" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDateTime" Type="DateTime" Precision="0" />
+          <Property Name="UpdateDateTime" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="data_detail_info" Relationship="clouddataModel.fk_data_detail_info" FromRole="data_info" ToRole="data_detail_info" />
+          <NavigationProperty Name="data_type_info" Relationship="clouddataModel.fk_data_info_type_info" FromRole="data_info" ToRole="data_type_info" />
+        </EntityType>
+        <EntityType Name="data_special">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Data_Special_Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Data_Special_Url" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Data_Special_Desc" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDateTime" Type="DateTime" Precision="0" />
+          <Property Name="UpdateDateTime" Type="DateTime" Precision="0" />
+          <Property Name="Data_Image" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="DownloadCount" Type="Int32" />
+          <Property Name="PageViewCount" Type="Int32" />
+          <Property Name="Data_IsPublish" Type="Int32" />
+        </EntityType>
+        <EntityType Name="data_type_info">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Data_Type_Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Data_Type_Image" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Data_Type_Describe" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDateTime" Type="DateTime" Precision="0" />
+          <Property Name="UpdateDateTime" Type="DateTime" Precision="0" />
+          <Property Name="Data_Type_OrderNum" Type="Int32" />
+          <NavigationProperty Name="data_info" Relationship="clouddataModel.fk_data_info_type_info" FromRole="data_type_info" ToRole="data_info" />
+        </EntityType>
+        <EntityType Name="user_info">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="UserName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="UserPassword" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="UserLevel" Type="Int32" />
+          <Property Name="TelePhone" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+          <Property Name="EMail" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Position" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="WorkUnits" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDateTime" Type="DateTime" Precision="0" />
+          <Property Name="UpdateDateTime" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="user_role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="RoleCode" Type="Int32" />
+          <Property Name="RoleDownTime" Type="Int32" />
+        </EntityType>
+		
+        <Association Name="fk_data_detail_accessory_info">
+          <End Type="clouddataModel.data_detail_info" Role="data_detail_info" Multiplicity="0..1" />
+          <End Type="clouddataModel.data_accessory_info" Role="data_accessory_info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="data_detail_info">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="data_accessory_info">
+              <PropertyRef Name="Data_Detail_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_data_detail_info">
+          <End Type="clouddataModel.data_info" Role="data_info" Multiplicity="0..1" />
+          <End Type="clouddataModel.data_detail_info" Role="data_detail_info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="data_info">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="data_detail_info">
+              <PropertyRef Name="Data_Info_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_data_info_type_info">
+          <End Type="clouddataModel.data_type_info" Role="data_type_info" Multiplicity="0..1" />
+          <End Type="clouddataModel.data_info" Role="data_info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="data_type_info">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="data_info">
+              <PropertyRef Name="Data_Type_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="data_statistics">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="data_catagory" Type="Int64" Nullable="false" />
+          <Property Name="item_id" Type="Int64" Nullable="false" />
+          <Property Name="browse_quantity" Type="Int64" Nullable="false" />
+          <Property Name="download_quantity" Type="Int64" Nullable="false" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="clouddataModelStoreContainer" CdmEntityContainer="CloudDataContainer">
+          <EntitySetMapping Name="data_accessory_info">
+            <EntityTypeMapping TypeName="clouddataModel.data_accessory_info">
+              <MappingFragment StoreEntitySet="data_accessory_info">
+                <ScalarProperty Name="UpdateDateTime" ColumnName="UpdateDateTime" />
+                <ScalarProperty Name="CreateDateTime" ColumnName="CreateDateTime" />
+                <ScalarProperty Name="Data_Accessory_Address" ColumnName="Data_Accessory_Address" />
+                <ScalarProperty Name="Data_Accessory_Describe" ColumnName="Data_Accessory_Describe" />
+                <ScalarProperty Name="Data_Detail_ID" ColumnName="Data_Detail_ID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="data_announce_info">
+            <EntityTypeMapping TypeName="clouddataModel.data_announce_info">
+              <MappingFragment StoreEntitySet="data_announce_info">
+                <ScalarProperty Name="IsPublish" ColumnName="IsPublish" />
+                <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
+                <ScalarProperty Name="PublishBy" ColumnName="PublishBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="data_application">
+            <EntityTypeMapping TypeName="clouddataModel.data_application">
+              <MappingFragment StoreEntitySet="data_application">
+                <ScalarProperty Name="Data_Image" ColumnName="Data_Image" />
+                <ScalarProperty Name="DownloadCount" ColumnName="DownloadCount" />
+                <ScalarProperty Name="PageViewCount" ColumnName="PageViewCount" />
+                <ScalarProperty Name="Data_IsPublish" ColumnName="Data_IsPublish" />
+                <ScalarProperty Name="UpdateDateTime" ColumnName="UpdateDateTime" />
+                <ScalarProperty Name="CreateDateTime" ColumnName="CreateDateTime" />
+                <ScalarProperty Name="Data_Application_Content" ColumnName="Data_Application_Content" />
+                <ScalarProperty Name="Data_Application_Name" ColumnName="Data_Application_Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="data_detail_info">
+            <EntityTypeMapping TypeName="clouddataModel.data_detail_info">
+              <MappingFragment StoreEntitySet="data_detail_info">
+                <ScalarProperty Name="SearchContidion6" ColumnName="SearchContidion6" />
+                <ScalarProperty Name="SearchContidion5" ColumnName="SearchContidion5" />
+                <ScalarProperty Name="SearchContidion4" ColumnName="SearchContidion4" />
+                <ScalarProperty Name="SearchColumns6" ColumnName="SearchColumns6" />
+                <ScalarProperty Name="SearchColumns5" ColumnName="SearchColumns5" />
+                <ScalarProperty Name="SearchColumns4" ColumnName="SearchColumns4" />
+                <ScalarProperty Name="SearchContidion3" ColumnName="SearchContidion3" />
+                <ScalarProperty Name="SearchContidion2" ColumnName="SearchContidion2" />
+                <ScalarProperty Name="SearchContidion1" ColumnName="SearchContidion1" />
+                <ScalarProperty Name="SearchColumns3" ColumnName="SearchColumns3" />
+                <ScalarProperty Name="SearchColumns2" ColumnName="SearchColumns2" />
+                <ScalarProperty Name="SearchColumns1" ColumnName="SearchColumns1" />
+                <ScalarProperty Name="Data_IsOutSide" ColumnName="Data_IsOutSide" />
+                <ScalarProperty Name="Data_IsPublish" ColumnName="Data_IsPublish" />
+                <ScalarProperty Name="Data_Detail_Desc" ColumnName="Data_Detail_Desc" />
+                <ScalarProperty Name="Data_Detail_Script" ColumnName="Data_Detail_Script" />
+                <ScalarProperty Name="Data_Detail_Source" ColumnName="Data_Detail_Source" />
+                <ScalarProperty Name="UpdateDateTime" ColumnName="UpdateDateTime" />
+                <ScalarProperty Name="CreateDateTime" ColumnName="CreateDateTime" />
+                <ScalarProperty Name="Data_Detail_Name" ColumnName="Data_Detail_Name" />
+                <ScalarProperty Name="Data_Info_ID" ColumnName="Data_Info_ID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="data_info">
+            <EntityTypeMapping TypeName="clouddataModel.data_info">
+              <MappingFragment StoreEntitySet="data_info">
+                <ScalarProperty Name="UpdateDateTime" ColumnName="UpdateDateTime" />
+                <ScalarProperty Name="CreateDateTime" ColumnName="CreateDateTime" />
+                <ScalarProperty Name="Data_Info_Describe" ColumnName="Data_Info_Describe" />
+                <ScalarProperty Name="Data_Info_Image" ColumnName="Data_Info_Image" />
+                <ScalarProperty Name="Data_Info_Name" ColumnName="Data_Info_Name" />
+                <ScalarProperty Name="Data_Type_ID" ColumnName="Data_Type_ID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="data_special">
+            <EntityTypeMapping TypeName="clouddataModel.data_special">
+              <MappingFragment StoreEntitySet="data_special">
+                <ScalarProperty Name="Data_IsPublish" ColumnName="Data_IsPublish" />
+                <ScalarProperty Name="PageViewCount" ColumnName="PageViewCount" />
+                <ScalarProperty Name="DownloadCount" ColumnName="DownloadCount" />
+                <ScalarProperty Name="Data_Image" ColumnName="Data_Image" />
+                <ScalarProperty Name="UpdateDateTime" ColumnName="UpdateDateTime" />
+                <ScalarProperty Name="CreateDateTime" ColumnName="CreateDateTime" />
+                <ScalarProperty Name="Data_Special_Desc" ColumnName="Data_Special_Desc" />
+                <ScalarProperty Name="Data_Special_Url" ColumnName="Data_Special_Url" />
+                <ScalarProperty Name="Data_Special_Name" ColumnName="Data_Special_Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="data_type_info">
+            <EntityTypeMapping TypeName="clouddataModel.data_type_info">
+              <MappingFragment StoreEntitySet="data_type_info">
+                <ScalarProperty Name="Data_Type_OrderNum" ColumnName="Data_Type_OrderNum" />
+                <ScalarProperty Name="UpdateDateTime" ColumnName="UpdateDateTime" />
+                <ScalarProperty Name="CreateDateTime" ColumnName="CreateDateTime" />
+                <ScalarProperty Name="Data_Type_Describe" ColumnName="Data_Type_Describe" />
+                <ScalarProperty Name="Data_Type_Image" ColumnName="Data_Type_Image" />
+                <ScalarProperty Name="Data_Type_Name" ColumnName="Data_Type_Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_info">
+            <EntityTypeMapping TypeName="clouddataModel.user_info">
+              <MappingFragment StoreEntitySet="user_info">
+                <ScalarProperty Name="UpdateDateTime" ColumnName="UpdateDateTime" />
+                <ScalarProperty Name="CreateDateTime" ColumnName="CreateDateTime" />
+                <ScalarProperty Name="WorkUnits" ColumnName="WorkUnits" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="TelePhone" ColumnName="TelePhone" />
+                <ScalarProperty Name="UserLevel" ColumnName="UserLevel" />
+                <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_role">
+            <EntityTypeMapping TypeName="clouddataModel.user_role">
+              <MappingFragment StoreEntitySet="user_role">
+                <ScalarProperty Name="RoleDownTime" ColumnName="RoleDownTime" />
+                <ScalarProperty Name="RoleCode" ColumnName="RoleCode" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="data_statistics">
+            <EntityTypeMapping TypeName="clouddataModel.data_statistics">
+              <MappingFragment StoreEntitySet="data_statistics">
+                <ScalarProperty Name="download_quantity" ColumnName="download_quantity" />
+                <ScalarProperty Name="browse_quantity" ColumnName="browse_quantity" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="data_catagory" ColumnName="data_catagory" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="false" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <edmx:DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams />
+  </edmx:Designer>
+</edmx:Edmx>

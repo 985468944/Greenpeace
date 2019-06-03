@@ -1,0 +1,211 @@
+﻿@model CloudDataMar.Web.ViewModel.UserViewModel
+@{
+    ViewBag.Title = "UserList";
+    Layout = "~/views/shared/_indexlayout.cshtml";
+}
+<div class="container" style="margin: 50px 0px;">
+    <div class="insideCon insideBg">
+        <div class="title" style="margin-top:-20px;margin-left:-15px">
+            <h1 style="line-height:none;">用户管理</h1>
+        </div>
+        <form id="saveform" name="saveform" method="Post" role="form" action="">
+            <div class="row form-group">
+                <div class="col-lg-4 col-md-4">
+                    <label>用户名:</label>
+                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", Value = Request.Form["UserName"] })
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <label>电话号码:</label>
+                    @Html.TextBoxFor(m => m.TelePhone, new { @class = "form-control", Value = Request.Form["TelePhone"] })
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <label>邮箱地址:</label>
+                    @Html.TextBoxFor(m => m.EMail, new { @class = "form-control", Value = Request.Form["EMail"] })
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-lg-4 col-md-4">
+                    <label>工作单位:</label>
+                    @Html.TextBoxFor(m => m.WorkUnits, new { @class = "form-control", Value = Request.Form["WorkUnits"] })
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <label>角色:</label>
+                    <select id="Userlevel" name="Userlevel" class="form-control">
+                        <option value="-1">所有</option>
+                        <option value="1">管理员</option>
+                        <option value="2">员工</option>
+                        <option value="3">高级会员</option>
+                        <option value="4">中级会员</option>
+                        <option value="5">初级会员</option>
+                    </select>
+                </div>
+                <div class="col-lg-4 col-md-4" style="padding-top:5px;">
+                    <label></label>
+                    <button id="btnSearch" value="Search" type="submit" class="form-control btn-primary">搜索</button>
+                </div>
+            </div>
+        </form>
+        <div class="tableList">
+            <table cellpadding="0" cellspacing="0" id="issueTable" class="tableStyle tableStyle1 dataTable mg20 mt20">
+                <thead>
+                    <tr role="row">
+                        <th>用户名</th>
+                        <th>密码</th>
+                        <th>电话号码</th>
+                        <th>邮箱地址</th>
+                        <th>工作单位</th>
+                        <th>角色</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">调整角色</h4>
+                    </div>
+                    <form id="changeform" method="Post" role="form">
+                        <div class="modal-body">
+                            <input type="hidden" id="changeid" name="changeid" />
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 form-group">
+                                    <label>角色:</label>
+                                    <select id="ChangeUserlevel" name="ChangeUserlevel" class="form-control">
+                                        <option value="1">管理员</option>
+                                        <option value="2">员工</option>
+                                        <option value="3">高级会员</option>
+                                        <option value="4">中级会员</option>
+                                        <option value="5">初级会员</option>
+                                    </select>
+                                </div>
+                                <div class="row" style="margin-top: 10px;" id="divsave">
+                                    <div class="col-lg-4">
+                                        <button class="btn btn-primary save" id="btnchange" type="submit">保存</button>
+                                        <a class="btn btn-default btn-cancel" data-dismiss="modal">取消</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+    $.fn.dataTable.ext.errMode = function (s, h, m) { }
+    var issueTable;
+    $("#Userlevel option[value='" + @Request.Form["Userlevel"] +"']").attr("selected", true);
+    $(function () {
+        issueTable = $('#issueTable').DataTable({
+            "sDom": "rtip",
+            "bProcessing": false,
+            "bServerSide": false,
+            "bFilter": false,
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bAutoWidth": true,
+            "bInfo": false,
+            "ajax": {
+                url: "/BaseMar/GetUserList",
+                type: "POST"
+            },
+            "sAjaxDataProp": "Results",//保存列表的字段
+            "aoColumns": [
+                { "mData": 'UserName', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                { "mData": 'UserPassword', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                { "mData": 'TelePhone', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                { "mData": 'EMail', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                { "mData": 'WorkUnits', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                { "mData": 'Role', 'sDefaultContent': '', "sClass": "left", 'sWidth': '' },
+                { "mData": 'Action', 'sDefaultContent': '', "sClass": "left", "bSortable": false }
+            ],
+            "fnServerParams": function (aoData) {  //查询条件
+                aoData.push(
+                        { "name": "user_name", "value": $("#UserName").val() },
+                        { "name": "tele_phone", "value": $("#TelePhone").val() },
+                        { "name": "e_mail", "value": $("#EMail").val() },
+                        { "name": "work_units", "value": $("#WorkUnits").val() },
+                        { "name": "user_level", "value": $("#Userlevel").val() }
+                    )
+            }, "drawCallback": function (settings) {
+                goBack();
+            }
+        });
+    });
+
+    $('#btnchange').click(function () {
+        $('#changeform').ajaxSubmit({
+            url: '/BaseMar/ChangeRoleById',
+            type: 'post',
+            data: { 'ID': $('#changeid').val(), 'userlevel': $("#ChangeUserlevel ").val() },
+            success: function (data) {
+                if (data.State == "Success") {
+                    alert(data.State);
+                   goBack();
+                }
+                else {
+                    $.alert({
+                        title: data.State,
+                        content: data.Message
+                    });
+                }
+            }
+        });
+    });
+
+    $(document).on('click', '.btn-link', function () {
+        var tr = $(this).closest('tr');
+        var row = issueTable.row(tr);
+        if ($.trim(row.data().ID) != '') {
+            $('#changeid').val(row.data().ID);
+            $("#ChangeUserlevel option[text='" + row.data().Role + "']").attr("selected", true);
+        }
+    });
+
+    function goBack() {
+        $("#baseDataMar").removeClass("active");
+        $("#baseUserMar").addClass("active");
+    }
+
+    $(document).on("click", ".btn-delete", function () {
+        var $this = $(this);
+        $.confirm({
+            title: 'Confirm!',
+            content: 'Comfirm to Delete this User？',
+            confirm: function () {
+                $.get($this.attr("href"), null, function (data) {
+                    if (data.State == "Success") {
+                        alert(data.State);
+                        goBack();
+                    }
+                    else if (data.State == "Exception") {
+                        $.alert({
+                            title: data.State,
+                            title: data.State,
+                            content: data.Message
+                        });
+                    }
+                    else {
+                        $.alert({
+                            title: data.State,
+                            content: data.Message
+                        });
+                    }
+                });
+            },
+            cancel: function () {
+                goBack();
+            }
+        });
+        return false;
+    });
+    </script>
+}
